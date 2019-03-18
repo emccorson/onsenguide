@@ -1,0 +1,23 @@
+<ons-page id="home">
+  <script>
+    const home = {
+      openMenu: () => {
+        document.querySelector('#menu').open();
+      }
+    };
+  </script>
+
+  <ons-toolbar>
+    <div class="center">Home</div>
+    <div class="left">
+      <ons-toolbar-button onclick="home.openMenu()">
+        <ons-icon icon="md-menu"></ons-icon>
+      </ons-toolbar-button>
+    </div>
+  </ons-toolbar>
+ 
+  <ons-tabbar id="tabbar">
+    <ons-tab page="tweets.html" label="Tweets"></ons-tab>
+    <ons-tab page="search.html" label="Search"></ons-tab>
+  </ons-tabbar>
+</ons-page>

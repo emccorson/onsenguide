@@ -1,0 +1,19 @@
+<ons-page id="tweets">
+  <script>
+    const tweets = {
+      about: () => { document.querySelector('#navigator').bringPageTop('about.html') },
+      pictures: () => { document.querySelector('#navigator').bringPageTop('pictures.html') }
+    };
+  </script>
+
+  <p>Howdy and hello.</p>
+
+  <p>
+    <ons-button onclick="tweets.about()">About</ons-button>
+  </p>
+
+  <p>
+    <ons-button onclick="tweets.pictures()">Pictures</ons-button>
+  </p>
+
+</ons-page>

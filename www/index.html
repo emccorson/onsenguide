@@ -12,11 +12,33 @@
     <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
     <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
     <script>
+
+    const index = {
+      load: (page) => {
+        document.querySelector('#menu').close();
+        document.querySelector('#navigator').bringPageTop(page, { animation: 'fade' });
+      }
+    };
+
     </script>
 </head>
 <body>
-  <ons-page>
-    Ok here we go.
-  </ons-page>
+
+  <ons-splitter>
+    <ons-splitter-side id="menu" collapse>
+      <ons-page>
+        <ons-list>
+          <ons-list-item onclick="index.load('about.html')">
+            About
+          </ons-list-item>
+        </ons-list>
+      </ons-page>
+    </ons-splitter-side>
+
+    <ons-splitter-content>
+      <ons-navigator id="navigator" page="login.html"></ons-navigator>
+    </ons-splitter-content>
+  </ons-splitter>
+
 </body>
 </html>

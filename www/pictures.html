@@ -1,0 +1,39 @@
+<ons-page>
+  <style>
+    ons-carousel-item {
+      background-color: #000;
+      min-height: 100%
+    }
+
+    img {
+      vertical-align: middle;
+      width: 100%;
+    }
+
+    #picture-toolbar {
+      background-color: #000;
+    }
+
+    #picture-toolbar .back-button__icon {
+      fill: #fff;
+    }
+  </style>
+  
+  <ons-toolbar id="picture-toolbar">
+    <div class="left">
+      <ons-back-button></ons-back-button>
+    </div>
+  </ons-toolbar>
+
+  <ons-carousel fullscreen swipeable auto-scroll auto-scroll-ratio="0.1">
+    <ons-carousel-item>
+      <img src=http://www.noise11.com/wp/wp-content/uploads/2011/11/George-Harrison-Moustache.jpg" />
+    </ons-carousel-item>
+    <ons-carousel-item>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/William_Hogarth_038.jpg/1280px-William_Hogarth_038.jpg" />
+    </ons-carousel-item>
+    <ons-carousel-item>
+      <img src="https://www.stripes.com/polopoly_fs/1.132252.1295410423!/image/1876888734.jpg_gen/derivatives/landscape_804/1876888734.jpg" />
+    </ons-carousel-item>
+  </ons-carousel>
+</ons-page>
