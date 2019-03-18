@@ -1,3 +1,47 @@
 <ons-page id="search">
-  <p>Search away...</p>
+
+  <script>
+    const originalResults = ['happy', 'Monday', 'on', 'and', 'the', 'sound'];
+    let results = originalResults;
+
+    document.addEventListener('init', () => {
+
+      const lazy = document.querySelector('#lazy');
+
+      lazy.delegate = {
+        createItemContent: (i) => { return ons.createElement(`<ons-list-item>${results[i]}</ons-list-item>`) },
+        countItems: () => { return results.length }
+      };
+
+      lazy.refresh();
+    });
+
+    const filter = () => {
+      const inp = document.querySelector('#searchinp').value;
+
+      if (inp === '') {
+        results = originalResults;
+      } else {
+        results = originalResults.flatMap(e => {
+          const start = e.toLowerCase().indexOf(inp.toLowerCase());
+
+          if (start === -1) {
+            return [];
+          } else {
+            const end = start + inp.length;
+
+            return [e.slice(0, start) + '<strong>' + e.slice(start, end) + '</strong>' + e.slice(end)];
+          }
+        });
+      }
+
+      lazy.refresh();
+    };
+  </script>
+
+  <ons-search-input id="searchinp" oninput="filter()"></ons-search-input>
+
+  <ons-list>
+    <ons-lazy-repeat id="lazy"></ons-lazy-repeat>
+  </ons-list>
 </ons-page>
