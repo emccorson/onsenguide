@@ -1,5 +1,6 @@
 <ons-page id="pokemon">
   <script>
+
     let resultos = [];
     
     const get = async () => {
@@ -13,6 +14,12 @@
     }
 
     document.addEventListener('init', () => {
+
+      // detecting scroll
+      document.querySelector('#pokemon .page__content').addEventListener('scroll', () => {
+        console.log('scrolling me');
+      });
+
       const list = document.querySelector('#lazy-pokemon');
 
       list.delegate = {
@@ -24,7 +31,7 @@
 
   <ons-button onclick="get()">Get</ons-button>
 
-  <ons-list>
+  <ons-list id="listo">
     <ons-lazy-repeat id="lazy-pokemon"></ons-lazy-repeat>
   </ons-list>
 </ons-page>
