@@ -1,0 +1,30 @@
+<ons-page id="pokemon">
+  <script>
+    let resultos = [];
+    
+    const get = async () => {
+      const response = await fetch('http://pokeapi.co/api/v2/pokemon', {
+        method: 'GET'
+      });
+      const back = await response.json();
+      console.log(back);
+      resultos = back.results.map(e => e.name);
+      document.querySelector('#lazy-pokemon').refresh();
+    }
+
+    document.addEventListener('init', () => {
+      const list = document.querySelector('#lazy-pokemon');
+
+      list.delegate = {
+        createItemContent: (i) => { return ons.createElement(`<ons-list-item>${resultos[i]}</ons-list-item>`) },
+        countItems: () => { return resultos.length }
+      };
+    });
+  </script>
+
+  <ons-button onclick="get()">Get</ons-button>
+
+  <ons-list>
+    <ons-lazy-repeat id="lazy-pokemon"></ons-lazy-repeat>
+  </ons-list>
+</ons-page>
