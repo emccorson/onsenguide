@@ -8,6 +8,11 @@
   </style>
 
   <script>
+    const savePokemon = (pokenumber, button) => {
+      addPokemonToGrid(pokenumber);
+      button.parentNode.parentNode.hideExpansion();
+    }
+
     document.addEventListener('init', ({ target }) => {
       if (target.matches('#pokemon')) {
         // local storage keys
@@ -40,7 +45,8 @@
                 ${i + 1} ${items[i]}
 
                 <div class="expandable-content">
-                  GODDAMN I LOVE THESE PEACHES
+                  <div>GODDAMN I LOVE THESE PEACHES</div>
+                  <ons-button onclick="savePokemon(${i + 1}, this)">Save</ons-button>
                 </div>
               </ons-list-item>
             `);

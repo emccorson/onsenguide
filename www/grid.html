@@ -1,117 +1,33 @@
 <ons-page id="grid">
   <style>
-    .grideroo {
+    #grideroo {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       grid-auto-rows: 33vw;
       background-color: black;
     }
 
-    .grideroo img {
+    #grideroo img {
       width: 100%;
       height: 100%;
     }
   </style>
 
   <script>
-    const showCard = (cell) => {
-      // get pokemon number from image source
-      // this is very evil.
-      const reggieTheRegex = /([0-9]+)\.png/;
-      const imageSource = cell.querySelector('img').getAttribute('src');
-      const pokenumber = reggieTheRegex.exec(imageSource)[1]; // element 1 is the first group
+    const addPokemonToGrid = pokenumber => {
+      const grid = document.querySelector('#grideroo');
+      const cell = document.createElement('div');
+      cell.onclick = () => document.querySelector('#navigator').bringPageTop('card.html', { data: { pokenumber } });
 
-      document.querySelector('#navigator').bringPageTop('card.html', { data: { pokenumber } });
+      const image = document.createElement('img');
+      image.setAttribute('src', `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokenumber}.png`);
+
+      cell.appendChild(image);
+      grid.appendChild(cell);
     }
   </script>
 
-  <div class="grideroo">
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/8.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/11.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/12.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/13.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/14.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/15.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/16.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/17.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/18.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/19.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/20.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/22.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/22.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/23.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/24.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/26.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/27.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/28.png" />
-    </div>
-    <div onclick="showCard(this)">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/29.png" />
-    </div>
+  <div id="content">
+    <div id="grideroo"></div>
   </div>
 </ons-page>
