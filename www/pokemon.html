@@ -1,37 +1,47 @@
 <ons-page id="pokemon">
-  <script>
 
-    let resultos = [];
-    
-    const get = async () => {
-      const response = await fetch('http://pokeapi.co/api/v2/pokemon', {
-        method: 'GET'
-      });
-      const back = await response.json();
-      console.log(back);
-      resultos = back.results.map(e => e.name);
-      document.querySelector('#lazy-pokemon').refresh();
+	<style>
+		.after-list {
+      margin: 20px;
+      text-align: center;
     }
+	</style>
 
-    document.addEventListener('init', () => {
+  <script>
+    document.addEventListener('init', ({ target }) => {
+      if (target.matches('#pokemon')) {
+        let url = 'https://pokeapi.co/api/v2/pokemon';
 
-      // detecting scroll
-      document.querySelector('#pokemon .page__content').addEventListener('scroll', () => {
-        console.log('scrolling me');
-      });
+        const list = document.querySelector('#listo');
 
-      const list = document.querySelector('#lazy-pokemon');
+        const createItem = (e) => ons.createElement(`<ons-list-item>${e.name}</ons-list-item>`);
 
-      list.delegate = {
-        createItemContent: (i) => { return ons.createElement(`<ons-list-item>${resultos[i]}</ons-list-item>`) },
-        countItems: () => { return resultos.length }
-      };
+        const get = async () => {
+          const response = await fetch(url);
+          const json = await response.json();
+          json.results.forEach(e => list.appendChild(createItem(e)));
+          url = json.next;
+        };
+
+        get();
+
+        target.onInfiniteScroll = (done) => {
+          setTimeout(() => {
+            get();
+            done();
+          }, 0);
+        };
+      }
     });
   </script>
 
-  <ons-button onclick="get()">Get</ons-button>
+  <div class="content">
 
-  <ons-list id="listo">
-    <ons-lazy-repeat id="lazy-pokemon"></ons-lazy-repeat>
-  </ons-list>
+    <ons-list id="listo"></ons-list>
+
+   	<div class="after-list">
+	    <ons-icon icon="fa-spinner" size="26px" spin></ons-icon>
+    </div>
+
+  </div>
 </ons-page>
