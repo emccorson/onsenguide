@@ -20,14 +20,34 @@
   </style>
 
   <script>
-    document.addEventListener('init', ({ target }) => {
+    document.addEventListener('show', ({ target }) => {
       if (target.matches('#card')) {
-        // get number of pokemon we should show (passed in by grid)
-        const { pokenumber } = document.querySelector('#navigator').topPage.data;
+        const { pokenumber, savedPokemon } = document.querySelector('#navigator').topPage.data;
 
-        document.querySelector('#card-image').setAttribute('src',
-          `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokenumber}.png`
-        );
+        const carousel = document.querySelector('#carousel');
+
+        // figure out what new pokemon have been saved since we last showed the carousel
+        // this way we don't accidentally add the same pokemon twice
+        const sliceIndex = carousel.itemCount - savedPokemon.length;
+
+        if (sliceIndex !== 0) { // if there are unadded pokemon
+          const unaddedPokemon = savedPokemon.slice(sliceIndex);
+
+          unaddedPokemon.map(number => {
+            const carouselItem = ons.createElement(`
+              <ons-carousel-item>
+                <ons-card>
+                  <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png" />
+                </ons-card>
+              </ons-carousel-item>
+            `);
+
+            carousel.appendChild(carouselItem);
+          });
+        }
+
+        // go to the selected pokemon
+        carousel.setActiveIndex(savedPokemon.indexOf(pokenumber));
       }
     });
   </script>
@@ -38,32 +58,5 @@
     </div>
   </ons-toolbar>
 
-  <ons-carousel fullscreen swipeable auto-scroll auto-scroll-ratio="0.1">
-    <ons-carousel-item>
-      <ons-card>
-        <img id="card-image">
-        <!--
-        <div class="title">
-          Awesome framework
-        </div>
-        <div class="content">
-          <div>
-            <ons-button><ons-icon icon="ion-thumbsup"></ons-icon></ons-button>
-            <ons-button><ons-icon icon="ion-share"></ons-icon></ons-button>
-          </div>
-          <ons-list>
-            <ons-list-header>Bindings</ons-list-header>
-            <ons-list-item>Vue</ons-list-item>
-            <ons-list-item>Angular</ons-list-item>
-            <ons-list-item>React</ons-list-item>
-          </ons-list>
-        </div>
-        -->
-      </ons-card>
-    </ons-carousel-item>
-    <ons-carousel-item>
-    </ons-carousel-item>
-    <ons-carousel-item>
-    </ons-carousel-item>
-  </ons-carousel>
+  <ons-carousel id="carousel" fullscreen swipeable auto-scroll auto-scroll-ratio="0.1"></ons-carousel>
 </ons-page>

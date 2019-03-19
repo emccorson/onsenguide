@@ -14,17 +14,23 @@
   </style>
 
   <script>
+    let savedPokemon = [];
+
     const addPokemonToGrid = pokenumber => {
+      // we save a list so we can pass it to the card carousel thing
+      savedPokemon.push(pokenumber);
+
+      // now add the new pokemon to the grid
       const grid = document.querySelector('#grideroo');
       const cell = document.createElement('div');
-      cell.onclick = () => document.querySelector('#navigator').bringPageTop('card.html', { data: { pokenumber } });
+      cell.onclick = () => document.querySelector('#navigator').bringPageTop('card.html', { data: { pokenumber, savedPokemon } });
 
       const image = document.createElement('img');
       image.setAttribute('src', `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokenumber}.png`);
 
       cell.appendChild(image);
       grid.appendChild(cell);
-    }
+    };
   </script>
 
   <div id="content">
