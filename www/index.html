@@ -17,9 +17,12 @@
       load: (page) => {
         document.querySelector('#menu').close();
         document.querySelector('#navigator').bringPageTop(page, { animation: 'fade' });
+      },
+      clearLocalStorage: () => {
+        localStorage.clear();
+        ons.notification.alert('Cleared local storage');
       }
     };
-
     </script>
 </head>
 <body>
@@ -30,6 +33,9 @@
         <ons-list>
           <ons-list-item onclick="index.load('about.html')">
             About
+          </ons-list-item>
+          <ons-list-item onclick="index.clearLocalStorage()">
+            Clear local storage
           </ons-list-item>
         </ons-list>
       </ons-page>
