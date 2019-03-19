@@ -22,7 +22,7 @@
           let i = 0;
           let storedPokemon;
           while ((storedPokemon = localStorage.getItem(PREFIX + i)) !== null) {
-            console.log(`got ${storedPokemon} from local with key ${PREFIX + i}`);
+            //console.log(`got ${storedPokemon} from local with key ${PREFIX + i}`);
             items[i] = storedPokemon;
             i++;
           }
@@ -33,7 +33,17 @@
 
         lazy.delegate = {
           createItemContent: i => {
-            return ons.createElement(`<ons-list-item>${i + 1} ${items[i]}</ons-list-item>`);
+            return ons.createElement(`
+              <ons-list-item
+                expandable
+              >
+                ${i + 1} ${items[i]}
+
+                <div class="expandable-content">
+                  GODDAMN I LOVE THESE PEACHES
+                </div>
+              </ons-list-item>
+            `);
           },
           countItems: () => {
             return items.length;
@@ -55,7 +65,7 @@
           // save new items and next url in local storage
           newPokemonCapitalised.forEach((name, i) => {
             const key = PREFIX + (previousLength + i);
-            console.log(`Storing ${name} as ${key}`);
+            //console.log(`Storing ${name} as ${key}`);
             localStorage.setItem(key, name)
           });
           localStorage.setItem(URL, json.next);
