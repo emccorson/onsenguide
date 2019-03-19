@@ -5,10 +5,16 @@
         document.querySelector('#menu').open();
       }
     };
+
+    document.addEventListener('prechange', ({ target, tabItem }) => {
+      if (target.matches('#tabbar')) {
+        document.querySelector('#home-toolbar .center').innerHTML = tabItem.getAttribute('label');
+      }
+    });
   </script>
 
-  <ons-toolbar '#toolbar'>
-    <div class="center">Home</div>
+  <ons-toolbar id="home-toolbar">
+    <div class="center">Tweets</div>
     <div class="left">
       <ons-toolbar-button onclick="home.openMenu()">
         <ons-icon icon="md-menu"></ons-icon>
