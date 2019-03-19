@@ -11,16 +11,26 @@
     document.addEventListener('init', ({ target }) => {
       if (target.matches('#pokemon')) {
         let url = 'https://pokeapi.co/api/v2/pokemon';
+        let items = [];
 
         const list = document.querySelector('#listo');
+        const lazy = document.querySelector('#lazyboy');
 
-        const createItem = (e) => ons.createElement(`<ons-list-item>${e.name}</ons-list-item>`);
+        lazy.delegate = {
+          createItemContent: i => {
+            return ons.createElement(`<ons-list-item>${i + 1} ${items[i]}</ons-list-item>`);
+          },
+          countItems: () => {
+            return items.length;
+          }
+        };
 
         const get = async () => {
           const response = await fetch(url);
           const json = await response.json();
-          json.results.forEach(e => list.appendChild(createItem(e)));
+          items.push(...json.results.map(e => e.name));
           url = json.next;
+          lazy.refresh();
         };
 
         get();
@@ -29,7 +39,7 @@
           setTimeout(() => {
             get();
             done();
-          }, 0);
+          }, 200);
         };
       }
     });
@@ -37,7 +47,9 @@
 
   <div class="content">
 
-    <ons-list id="listo"></ons-list>
+    <ons-list id="listo">
+      <ons-lazy-repeat id="lazyboy"></ons-lazy-repeat>
+    </ons-list>
 
    	<div class="after-list">
 	    <ons-icon icon="fa-spinner" size="26px" spin></ons-icon>
