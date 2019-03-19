@@ -13,7 +13,7 @@ show the reader how to use Onsen UI components to build functionality that is co
 
 ## Installing
 
-`npm install`
+`npm install -g monaca && npm install`
 
 
 ## Running
