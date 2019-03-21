@@ -78,7 +78,7 @@ These form components work mostly the same way as regular HTML form elements
 such as `input`, but the Onsen UI ones will be automatically styled to match the
 device your app is running on.
 
-Add this to index.html:
+Add this to `index.html`:
 
 ```html
 <body>
@@ -199,6 +199,10 @@ own notifications. There are several different notifications available, but the
 one used here is `ons.notification.alert`. See more about the available
 notifications in the API pages.
 
+> It's quickly going to get annoying if we have to keep typing in the username
+> and password every time we want to run the app. While you're developing, set
+> the correct username and password to blank strings to save time.
+
 > > - Now make the button work
 > >   - Introduce the `script` tag
 > >   - Set `onclick` and say it's just exactly the same as a normal button but it
@@ -263,7 +267,7 @@ show at startup. Put the `ons-navigator` around the login page:
         <ons-button>Sign in</ons-button>
       </p>
       </div>
-       
+
     </ons-page>
   </ons-navigator>
 
@@ -353,13 +357,237 @@ page out of a template and into its own file.
 > >   - At this point, warn any morons that you shouldn't store the username and
 > >     password in your HTML in real life
 
+## Toolbar
+
+The home page could use a little more styling. Let's add a toolbar to make it
+look better. For this we need the `ons-toolbar` component:
+
+```html
+<ons-page id="home">
+  <ons-toolbar id="home-toolbar">
+    <div class="center">Home</div>
+  </ons-toolbar>
+
+  Hello!
+</ons-page>
+```
+
+Here we have used `ons-toolbar` to define a toolbar. Inside it we have a `div`
+with class `center`. `div.center` describes what should go in the middle of the
+toolbar. You can also use `div.left` and `div.right` to position elements to the
+left and right of the toolbar.
+
 ## Splitter menu to About page
 
-## Toolbar and back button
+Now let's see how to add a collapsable side-menu. We're going to add links to
+other pages in the side-menu, so let's create a new page. Create a new file
+`about.html` and paste this:
 
-## Multiple files
+```html
+<ons-page id="about">
+  <ons-toolbar>
+    <div class="center">About</div>
+  </ons-toolbar>
 
-- Actually we might be able to put this earlier
+  This is the about page.
+</ons-about>
+```
+
+We'll also need a button to open the side-menu, so let's add one to the left of
+the home page toolbar, complete with a function that we'll define in a minute:
+
+```html
+<ons-toolbar id="home-toolbar">
+  <div class="center">Home</div>
+
+  <div class="left">
+    <ons-toolbar-button oncick="openMenu()">
+      <ons-icon icon="md-menu"></ons-icon>
+    </ons-toolbar-button>
+  </div>
+</ons-toolbar>
+```
+
+Two new components worth mentioning here:
+
+Firstly, `ons-toolbar-button`: This component is basically the same as
+`ons-button` except that it is specifically for buttons inside a toolbar. It
+adds some extra styling to make the button fit the look of the toolbar.
+
+### Icons
+
+Secondly, `ons-icon`: Whenever you want to display an icon, use this component.
+The specific icon is defined in the `icon` attribute. There are Ionicons for
+iOS, Material Design icons for Android, and Font Awesome icons. Each type of
+icon has its own prefix: `ion-`, `md-`, and `fa-`, respectively. For examples of
+`ons-icon` usage, see the API page.
+
+### Splitter
+
+Side-menus are created in Onsen UI by using the `ons-splitter-` components.
+There is a parent component `ons-splitter`. It has two children:
+`ons-splitter-side` which contains everything that should appear in the
+side-menu; and `ons-splitter-content` which defines everthing _outside_ the side
+menu. This means that `ons-splitter` effectively wraps the whole app.
+
+We're about to rewrite the body of `index.html` so first let's move the login
+page to a new file `login.html`:
+
+```html
+<ons-page>
+  <script>
+    const login = {
+      const username = document.querySelector('#username').value;
+      const password = document.querySelector('#password').value;
+
+      if (username === '' && password === '') {
+        const navigator = document.querySelector('#navigator');
+
+        navigator.resetToPage('home.html', { animation: 'fade' });
+      } else {
+        ons.notification.alert('bad');
+      }
+    };
+  </script>
+
+  <div style="text-align: center; margin-top: 50%">
+  <p>
+    <ons-input id="username" placeholder="Username" modifier="underbar"></ons-input>
+  </p>
+
+  <p>
+    <ons-input
+      id="password"
+      placeholder="Password"
+      type="password"
+      modifier="underbar"
+    >
+    </ons-input>
+  </p>
+
+  <p>
+    <ons-button>Sign in</ons-button>
+  </p>
+  </div>
+
+</ons-page>
+```
+
+Notice that we also copied the `login` function and put it in a `script` tag.
+Strictly this isn't necessary but it's good practice to keep helper functions
+with the HTML they are called from.
+
+Now change the body of `index.html` to:
+
+```html
+<body>
+  <ons-splitter>
+    <!-- The side-menu -->
+    <ons-splitter-side id="menu" collapse>
+    </ons-splitter-side>
+
+    <!-- Everything not in the side-menu -->
+    <ons-splitter-content>
+      <ons-navigator id="navigator" page="login.html"></ons-navigator>
+    </ons-splitter-content>
+  </ons-splitter>
+</body>
+```
+
+If you open the app now, you won't see the side-menu. We need to add a way to
+open it. We don't want to be able to open the side-menu from the login page, but
+we do want to be able to open it from the home page. Now it's time to define the
+`openMenu` function we added to the toolbar button in `home.html`:
+
+```html
+<script>
+  const openMenu = () => {
+    document.querySelector('#menu').open();
+  };
+</script>
+```
+
+Run the app, hit the login button, add the tap the menu icon at the top left of
+the home page. The side-menu appears!
+
+But there's nothing in it, so let's remedy that now. We are going to put a list
+of links in the side-menu, and for that we need `ons-list` and `ons-list-item`:
+
+```html
+<ons-splitter>
+  <ons-splitter-side id="menu" collapse>
+    <ons-page>
+      <ons-list>
+        <ons-list-item onclick="loadPage('about.html')">
+          About
+        </ons-list-item>
+      </ons-list>
+    </ons-page>
+  </ons-splitter-side>
+
+  <ons-splitter-content>
+    <ons-navigator id="navigator" page="login.html"></ons-navigator>
+  </ons-splitter-content>
+</ons-splitter>
+```
+
+`ons-list` represents a list - it's the Onsen UI equivalent of `ul`.
+
+`ons-list-item` is a single item in a list. It is only ever used inside an
+`ons-list`. It's the Onsen UI version of `li`. Like the toolbar, elements can be
+position to the left, right and center of `ons-list-item` with `div.left`,
+`div.right` and `div.center`. If you don't define one of these, the list item's
+contents are positioned in the center by default.
+
+In the `onclick` attribute of the list item we just defined, we've called a
+function `loadPage`. We need to define it:
+
+```javascript
+const loadPage = (page) => {
+  document.querySelector('#menu').close();
+  document.querySelector('#navigator').bringPageTop(page, { animation: 'fade' });
+};
+```
+
+Now when the side-menu is opened, it will contain a link to the About page. Tap
+the link and the About page will be loaded, then the side-menu will close.
+
+## Back button
+
+Let's stop and see how far we've got:
+
+  1. We can log in to the app.
+  2. Once successfully logged in, the home page is shown.
+  3. From the home page, we can open the side menu and navigate to the About
+     page.
+
+Very nice, but once the user is on the About page, there's no way to get back
+to the home page. We could add a button and hard-wire it to go to the Home page,
+but a better solution is to add a __back button__.
+
+The back button component is `ons-back-button`. When `ons-back-button` is
+tapped, it looks for a parent `ons-navigator`. Then it pops the top page off
+the navigator's page stack, taking the user back to the previous page.
+
+Let's add it to the About page toolbar:
+
+```html
+<ons-page id="about">
+
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button></ons-back-button>
+    </div>
+
+    <div class="center">About</div>
+  </ons-toolbar>
+
+  <p>The mighty About page.</p>
+
+</ons-page>
+```
+
+No further work is needed; `ons-back-button` works straight out the box.
 
 ## Tabs
 
