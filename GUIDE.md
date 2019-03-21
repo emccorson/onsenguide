@@ -24,7 +24,7 @@ const () => console.log('and here is some code');
     - No setup required
     - Easy to switch between iOS and Android
     - Can't do multiple files
-  - Monaca CLI 
+  - Monaca CLI
     - **RECOMMEND THIS ONE**
       - Will I need to update the templates before I recommend this? If the
         templates change then the tutorial might be in hot water.
@@ -102,7 +102,7 @@ Add this to `index.html`:
       <ons-button>Sign in</ons-button>
     </p>
     </div>
-     
+
   </ons-page>
 </body>
 ```
@@ -124,23 +124,23 @@ this login form to change the appearance of the button and input boxes.
 
 > > - Open up `www/index.html`
 > > - In the body, add:
-> > 
+> >
 > > ```html
 > > <ons-page>
 > >   Hello, world!
 > > </ons-page>
 > > ```
-> > 
+> >
 > > - Say some things about `ons-page` and how it's HTML just like you know and love
 > > - Now stick in the login form and button:
-> > 
+> >
 > > ```html
 > > <ons-page>
 > >   <div style="text-align: center; margin-top: 50%">
 > >   <p>
 > >     <ons-input id="username" placeholder="Username" modifier="underbar"></ons-input>
 > >   </p>
-> > 
+> >
 > >   <p>
 > >     <ons-input
 > >       id="password"
@@ -150,14 +150,14 @@ this login form to change the appearance of the button and input boxes.
 > >     >
 > >     </ons-input>
 > >   </p>
-> > 
+> >
 > >   <p>
 > >     <ons-button style="">Sign in</ons-button>
 > >   </p>
 > >   </div>
 > > </ons-page>
 > > ```
-> > 
+> >
 > > - (Boy, it certainly got ugly quickly.)
 > > - Run the app, punch the air
 
@@ -201,7 +201,7 @@ notifications in the API pages.
 
 > It's quickly going to get annoying if we have to keep typing in the username
 > and password every time we want to run the app. While you're developing, set
-> the correct username and password to blank strings to save time.
+> the correct username and password to empty strings to save time.
 
 > > - Now make the button work
 > >   - Introduce the `script` tag
@@ -347,10 +347,10 @@ page out of a template and into its own file.
 > >   - Recommend now that any children still in the playground should grow up and
 > >     get a real man's toolchain
 > >   - The new page should go in a new file
-> > 
+> >
 > > - The mighty navigator! (or how to wield pages)
 > > - Move the login page to its own file and make the index page just the navigator
-> > 
+> >
 > > - Now to log in:
 > >   - Set the click for button to check the username and password and then move
 > >     to the new page if all is good
@@ -552,6 +552,15 @@ const loadPage = (page) => {
 Now when the side-menu is opened, it will contain a link to the About page. Tap
 the link and the About page will be loaded, then the side-menu will close.
 
+> The `loadPage` function uses `ons-navigator.bringPageTop`. This function
+> pushes a page to the top of the page stack. If the page was already in the
+> page stack, `bringPageTop` takes it from wherever it was and places it at the
+> top. Otherwise, it creates a new instance of the page. `ons-navigator` has
+> another method, `pushPage`, which creates a new instance of a page regardless
+> of whether it already exists in the stack. We recommend using `bringPageTop`
+> over `pushPage` to avoid the error of accidentally loading the same page
+> twice, which can cause conflicts and unexpected bugs.
+
 ## Back button
 
 Let's stop and see how far we've got:
@@ -591,14 +600,259 @@ No further work is needed; `ons-back-button` works straight out the box.
 
 ## Tabs
 
-- Add a new tab for the pokemon list page
+Along with `ons-navigator`, Onsen UI provides another component for handling
+screen navigation. This is the `ons-tabbar` component. The tabbar keeps track of
+one or more tabs. It looks just like the tabbar in a web browser.
 
-## Harcoded list
+Most apps will make use of both `ons-navigator` and `ons-tabbar`. As a rule of
+thumb, the most commonly used pages should be tabs, and the less frequently
+visited pages (such as the About page) should not be.
 
-- Do expandable list with Save button here
-  - But wait, that's bad UI! (Well, that's a problem for U, not I.)
+We're next going to create a page that displays a list of Pokemon. Create a new
+file `pokemon.html` and paste the following:
 
-- Add save functionality now or once we have the grid?
+```html
+<ons-page id="pokemon">
+
+  <script>
+  </script>
+
+  <ons-list>
+    <ons-list-item>bulbasaur</ons-list-item>
+    <ons-list-item>charmander</ons-list-item>
+    <ons-list-item>squirtle</ons-list-item>
+    <ons-list-item>pikachu</ons-list-item>
+    <ons-list-item>trubbish</ons-list-item>
+  </ons-list>
+
+</ons-page>
+```
+
+Later we'll also add functionality to save Pokemon, so create a file
+`saved.html` for that now too:
+
+```html
+<ons-page id="saved">
+
+  <script>
+  </script>
+
+  <p>Saved Pokemon go here.</p>
+
+</ons-page>
+```
+
+OK, now back to `home.html` for the tabbar. Remove the `"Hello!"` message and
+replace it with `ons-tabbar`. (Don't miss the toolbar title changing from "Home"
+to "Pokemon"):
+
+```html
+<ons-page id="home">
+  <script>
+    ...
+  </script>
+
+  <ons-toolbar id="home-toolbar">
+    <div class="center">Pokemon</div>
+
+    <div class="left">
+      <ons-toolbar-button oncick="openMenu()">
+        <ons-icon icon="md-menu"></ons-icon>
+      </ons-toolbar-button>
+    </div>
+  </ons-toolbar>
+
+  <ons-tabbar id="tabbar">
+    <ons-tab page="pokemon.html" label="Pokemon"></ons-tab>
+    <ons-tab page="saved.html" label="Saved"></ons-tab>
+  </ons-tabbar>
+</ons-page>
+```
+
+Run the app. On the home page, there is a tabbar with two tabs labelled
+"Pokemon" and "Saved". Tap the tabs to switch the page content (i.e. the middle
+of the screen between the toolbar and the tabbar) between the two pages
+`pokemon.html` and `saved.html`.
+
+Let's examine the tabbar markup in more detail. We defined an `ons-tabbar`
+element with two `ons-tab` child elements. The only children of an `ons-tabbar`
+should be `ons-tab` elements.
+
+Then each `ons-tab` has a `page` attribute and a `label` attribute. The `page`
+attribute specifies which page should be loaded when the tab is tapped (this is
+the same as the `page` attribute of `ons-navigator`). The `label` attribute
+specifies what text is on the tab itself. There are more `ons-tab` attributes;
+see the docs.
+
+### Structure of the app
+
+We have now built an app with a fairly complicated structure. Time for a quick
+review:
+
+```
+At the top level, there is `ons-splitter`.
+ |
+ |-- The first child of `ons-splitter` is `ons-splitter-side`. Everything
+ |   defined in here specifies what should be in the side-menu.
+ |
+ |-- The second child of `ons-splitter` is `ons-splitter-content`. Everything
+     apart from the side-menu is defined in here.
+      |
+      |-- Within `ons-splitter-side` is `ons-navigator`. The navigator is used to
+      |   move between any pages that aren't tabs.
+      |
+      |-- Within `ons-navigator` are multiple `ons-page` components. Each
+          defines a page. `home.html` is the most interesting though, because it
+          contains a _tabbar_. Each child of the tabbar is a _tab_.
+```
+
+One common source of confusion is mixing up pages controlled by `ons-navigator`
+and tabs controlled by `ons-tabbar`. Carefully plan the structure of your app so
+you are sure what should be a tab and what should be a regular page.
+
+> If you're brave, it is possible to have a navigator and tabbar both handle the
+> same page. However, you are likely to be thanked for your efforts by bugs that
+> are tricky to fix, such as when you accidentally load a page in the DOM twice,
+> giving you two elements with the same ID. In general, there are better ways
+> to handle a page that is sometimes a normal page and sometimes a tab.
+
+> > - Add a new tab for the pokemon list page
+
+## Events
+
+You may have noticed something isn't quite right when you go to the "Saved" tab:
+The toolbar title still says "Pokemon" when it should say "Saved". To fix this,
+we need a bit of JavaScript to dynamically change the toolbar title when the tab
+changes.
+
+When the state of an Onsen UI component changes, such as when the tabbar's
+focused tab is change, or when the navigator loads a page, an event is fired.
+All we need to do to make use of these events is to add an event listener for
+the event we're interested in.
+
+In this instance, we want to listen for `ons-tabbar`'s `prechange` event. The
+`prechange` event is fired just before the tabbar moves to a tab. We add an
+event listener the same way as we would for any other JavaScript event:
+
+```javascript
+document.addEventListener('prechange', ({ target, tabItem }) => {
+  if (target.matches('#tabbar')) {
+    document.querySelector('#home-toolbar .center').innerHTML = tabItem.getAttribute('label');
+  }
+});
+```
+
+Run the app and witness the dynamically-changing toolbar title.
+
+Now to the code:
+
+  1. `document.addEventListener` is called to add a listener.
+  2. The first argument states we want to listen for `prechange`.
+  3. The callback function receives an event object as an argument. We need the
+     `target` and `tabItem` properties only.
+  4. We check if the target - the element that fired the event - is the tabbar.
+     This is an important step because more than one Onsen UI component can fire
+     an event with the same name. You have to make sure you don't accidentally
+     handle the wrong component's events.
+  5. If it was actually the tabbar that fired `prechange`, we get the label of the
+     new tab from `tabItem`'s `label` attribute, and set that as the center text
+     of the toolbar.
+
+For more information on Onsen UI events and what you can do with them, check the
+API documentation.
+
+## Expandable list items
+
+We breezed over the Pokemon list page before so we could get on to the tabbar,
+but let's go back to it now.
+
+So far there's a list of Pokemon, created using `ons-list` and `ons-list-item`.
+We would like to be able to select a Pokemon from this list and save it. This is
+a job for __expandable list items__.
+
+An expandable list item is one that increases in size when it is tapped,
+displaying content that was initially hidden. An `ons-list-item` is turned into
+an expandable list item by adding the `expandable` attribute and adding a child
+`div.expandable-content` containing the hidden content.
+
+Make each of the existing list items expandable:
+
+```html
+<ons-list>
+  <ons-list-item expandable>
+    bulbasaur
+    <div class="expandable-content">
+      <ons-button onclick="savePokemon(this)">Save</ons-button>
+    </div>
+  </ons-list-item>
+
+  <ons-list-item expandable>
+    charmander
+    <div class="expandable-content">
+      <ons-button onclick="savePokemon(this)">Save</ons-button>
+    </div>
+  </ons-list-item>
+
+  <ons-list-item expandable>
+    squirtle
+    <div class="expandable-content">
+      <ons-button onclick="savePokemon(this)">Save</ons-button>
+    </div>
+  </ons-list-item>
+
+  <ons-list-item expandable>
+    pikachu
+    <div class="expandable-content">
+      <ons-button onclick="savePokemon(this)">Save</ons-button>
+    </div>
+  </ons-list-item>
+
+  <ons-list-item expandable>
+    trubbish
+    <div class="expandable-content">
+      <ons-button onclick="savePokemon(this)">Save</ons-button>
+    </div>
+  </ons-list-item>
+</ons-list>
+```
+
+> If it's upsetting to see the same markup repeated five times, don't worry
+> because later on we'll be generating all of this with JavaScript.
+
+Tap a list item now and you'll see it expand to reveal the Save button. Tap it
+again to close.
+
+### Compilation
+
+Take a look at one of the expandable list items in your browser's developer
+tools.
+
+> If you're using Monaca CLI, run `monaca preview` to see the app in browser.
+
+Notice the list item contains two children, `div.top` and
+`div.expandable-content`. We know about `div.expandable-content` but where did
+`div.top` come from? The answer is that when Onsen UI compiled the list item, it
+put everything that wasn't inside `div.expandable-content` into `div.top`.
+`div.top` represents the part of the list item that is always shown - the _top_
+of the list item.
+
+`div.top` itself can have three children: `div.left`, `div.right` and
+`div.center`. Like the toolbar, these position elements to the left, right and
+center of the top part.
+
+Almost all Onsen UI components have their structured altered in some way during
+compilation. This means you can't assume that whatever is in your HTML file is
+what will actually be rendered in the app. However, you can "preempt" the
+compiler by writing the compiler output in your HTML file to begin with. This is
+helpful whenever you want to access things that the compiler does automatically,
+such as adding a top part to an expandable list item.
+
+> > What a dreadful explanation ^
+
+> > - Do expandable list with Save button here
+> >   - But wait, that's bad UI! (Well, that's a problem for U, not I.)
+> >
+> > - Add save functionality now or once we have the grid?
 
 ## Grid
 
