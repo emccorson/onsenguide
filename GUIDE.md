@@ -684,6 +684,18 @@ the same as the `page` attribute of `ons-navigator`). The `label` attribute
 specifies what text is on the tab itself. There are more `ons-tab` attributes;
 see the docs.
 
+## Theme Roller
+
+Now seems like a good time for a diversion into styling Onsen UI apps. There's a
+handy tool for this called Onsen UI [Theme
+Roller](https://onsen.io/theme-roller/). Once I know how to use it I'll let you
+know.
+
+> > - Figure out how to use the theme roller
+> > - Make a red theme to match our Pokemon app
+> > - Download the theme and add it to the app styles
+> > - At this point playground scrubs really should give up
+
 ### Structure of the app
 
 We have now built an app with a fairly complicated structure. Time for a quick
