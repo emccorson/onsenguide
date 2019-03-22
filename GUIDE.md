@@ -854,11 +854,67 @@ such as adding a top part to an expandable list item.
 > >
 > > - Add save functionality now or once we have the grid?
 
-## Grid
+## Grid and carousel
+
+### Saving Pokemon
+
+What should happen when a user presses the Save button? Well, that's where the
+Saved page we created earlier comes in.
+
+When a Pokemon is saved, it should be added to the Saved page. The Saved page
+will show the pictures of the saved Pokemon in a grid layout. When one of the
+pictures is tapped, the picture will fill the whole screen in a "gallery" style.
+The user can then swipe left or right to go to the previous or next saved
+Pokemon.
+
+Let's define `savePokemon` in `pokemon.html`:
+
+```javascript
+const savePokemon = (pokenumber, button) => {
+  addPokemonToGrid(pokenumber);
+  button.parentNode.parentNode.hideExpansion();
+};
+```
+
+`savePokemon` is called when a save button is pressed. It receives the number of
+the Pokemon we want to save (if you're not familiar with Pokemon, each Pokemon
+has a unique number), and the save button that was pressed. `savePokemon` simply
+calls `addPokemonToGrid` (not yet defined) and closes the expandable list item.
+
+Now we need to define `addPokemonToGrid` in `saved.html`. For now let's just
+store the Pokemon number in an array:
+
+```javascript
+let savedPokemon = [];
+
+const addPokemonToGrid = pokenumber => {
+  // we save a list so we can pass it to the gallery
+  savedPokemon.push(pokenumber);
+};
+```
+
+### Making the grid
+
+- Nothing special Onsen UI-wise so just chuck the code at 'em and vamoose
+- Get the static images
+
+### Rose and Valerie, screaming from the gallery
+
+- Introduce carousel
+- Introduce card if we can be bothered
 
 ## Page data from server
+
+### Caching in local storage
 
 - Add local storage caching as well
 - And don't forget the button to clear local storage as an aside
 
-## Card carousel
+### Lazy list
+
+
+
+
+
+
+And we're done.
