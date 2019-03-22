@@ -908,7 +908,14 @@ const addPokemonToGrid = pokenumber => {
 ### Making the grid
 
 - Nothing special Onsen UI-wise so just chuck the code at 'em and vamoose
+
+#### Static assets (or whatever it's called)
+
 - Get the static images
+- Do we need to curl them or is there a zip file somewhere or what?
+  - Check the other Pokedex sample app to find out
+- These get saved in... I don't know.
+- But once they are saved we can reference them as easy as lemons
 
 ### Rose and Valerie, screaming from the gallery
 
@@ -917,13 +924,26 @@ const addPokemonToGrid = pokenumber => {
 
 ## Page data from server
 
+- This is regular old JavaScript; nothing specific to Onsen UI here
+
 ### Caching in local storage
 
 - Add local storage caching as well
+  - Why cache? Because the PokeAPI people would get mad if we didn't
+  - Also it will work better offline
+  - Caching sucks for anything big but we're just within reasonable bounds for
+    the amount of data we're storing
+  - And it's just strings so that's fine too
 - And don't forget the button to clear local storage as an aside
 
 ### Lazy list
 
+- It's going to get horribly slow if we load those 900-odd Pokemon all into the
+  DOM.
+- To make it more slip-slidy fun, let's use lazy instead
+- It kills the items you can't see so everything is a bit faster
+- You need to set up the delegate object for it to work
+- You also need to remember to refresh it
 
 
 
