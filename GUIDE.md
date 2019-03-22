@@ -617,7 +617,7 @@ file `pokemon.html` and paste the following:
   <script>
   </script>
 
-  <ons-list>
+  <ons-list id="pokemon-list">
     <ons-list-item>bulbasaur</ons-list-item>
     <ons-list-item>charmander</ons-list-item>
     <ons-list-item>squirtle</ons-list-item>
@@ -924,7 +924,107 @@ const addPokemonToGrid = pokenumber => {
 
 ## Page data from server
 
-- This is regular old JavaScript; nothing specific to Onsen UI here
+Let's go back to the list of Pokemon at `pokemon.html`. At the moment, there are
+a few Pokemon hardcoded into the list, but it would be better if our list had
+_all_ Pokemon in it.
+
+Luckily, there's PokeAPI to help us out. PokeAPI is a REST API that provides
+information about everything to do with Pokemon. We're going to call one of its
+methods to get the full list of Pokemon.
+
+The results returned from PokeAPI are paged. This means we get the first few
+results (the first 20 in this case) and URL to request the next page of results
+if we want them. That way we only get the results we need as we need them, and
+also don't overload the PokeAPI servers.
+
+Since we're getting the Pokemon from the server, we don't need the hardcoded
+Pokemon currently in the list, so clear the decks:
+
+```html
+<ons-list id="pokemon-list">
+</ons-list>
+```
+
+Making the request to the API doesn't involve anything special or specific to
+Onsen UI, so there won't be much in the way of explanation. Add this to
+`pokemon.html`:
+
+```javascript
+let url = ; 'https://pokeapi.co/api/v2/pokemon';
+
+const get = async () => {
+  // do the API call and get JSON response
+  const response = await fetch(url);
+  const json = await response.json();
+
+  const newPokemon = json.results.map(e => e.name);
+
+  const list = document.querySelector('#pokemon-list');
+  newPokemon.forEach((name, i) => {
+    list.appendChild(ons.createElement(`
+      <ons-list-item expandable>
+        ${name}
+        <div class="expandable-content">
+          <ons-button onclick="savePokemon(/* WHO'S THAT POKEMON???? */, this)">Save</ons-button>
+        </div>
+      </ons-list-item>
+    `));
+  });
+
+  url = json.next;
+};
+```
+
+Briefly, the `get` function calls the PokeAPI to get a page of results. The
+response contains the next lot of Pokemon, which we append to the list. It also
+contains the URL to get the next page of results, which we save to `url`. The
+next time `get` is called, it will use the URL we just got.
+
+One interesting function here is `ons.createElement`. `ons.createElement` is a
+handy way to make elements dynamically if you want to add them to the DOM using
+JavaScript. It takes a string representation of the element you want to create
+and interprets it. See the docs for more information.
+
+### Loading the Pokemon as we need them
+
+We could keep calling `get` until we have all the Pokemon and add them to the
+list all at once, but that is wasteful because the user may never scroll all the
+way through the list. Instead we should only call `get` when the user has seen
+as much of the list as is currently loaded.
+
+```javascript
+document.addEventListener('init', ({ target }) {
+  if (target.matches('#pokemon')) {
+
+    let url = ; 'https://pokeapi.co/api/v2/pokemon';
+
+    const get = async () => {
+      /* definition of get */
+    };
+
+    // get the first set of results as soon as the page is initialised
+    get();
+
+    // at the bottom of the list get the next set of results and append them
+    target.onInfiniteScroll = (done) => {
+      setTimeout(() => {
+        get();
+        done();
+      }, 0);
+    };
+  }
+}
+```
+
+Here we add a listener for the `init` event that is fired when a page is
+initialised. If the page initialised was the Pokemon list page, we call `get` to
+get the first 20 Pokemon and add them to the list. Then we set the page's
+`infiniteScroll` property. The callback function of `infiniteScroll` is called
+when we reach the end of the page's content (defined by `div.content` which
+we'll add in a minute). We need to use `setTimeout` because otherwise the
+results could get spliced, I think.
+
+> > - This is regular old JavaScript; nothing specific to Onsen UI here
 
 ### Caching in local storage
 
