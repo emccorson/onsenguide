@@ -1024,7 +1024,27 @@ when we reach the end of the page's content (defined by `div.content` which
 we'll add in a minute). We need to use `setTimeout` because otherwise the
 results could get spliced, I think.
 
+For `infiniteScroll` to work, we need to wrap our content in `div.content`.
+Actually, Onsen UI wraps your content in `div.content` at compile time but we
+can do it explicitly here. We'll also add a spinner so that when the user
+reaches the end of the page, a spinner is shown while the next results are being
+loaded:
+
+```html
+<div class="content">
+
+  <ons-list id="pokemon-list">
+  </ons-list>
+
+  <div class="after-list">
+    <ons-icon icon="fa-spinner" size="26px" spin></ons-icon>
+  </div>
+
+</div>
+```
+
 > > - This is regular old JavaScript; nothing specific to Onsen UI here
+> > - Don't forget the bloomin' styling
 
 ### Caching in local storage
 
