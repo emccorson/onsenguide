@@ -996,7 +996,7 @@ as much of the list as is currently loaded.
 document.addEventListener('init', ({ target }) {
   if (target.matches('#pokemon')) {
 
-    let url = ; 'https://pokeapi.co/api/v2/pokemon';
+    let url = 'https://pokeapi.co/api/v2/pokemon';
 
     const get = async () => {
       /* definition of get */
@@ -1007,10 +1007,12 @@ document.addEventListener('init', ({ target }) {
 
     // at the bottom of the list get the next set of results and append them
     target.onInfiniteScroll = (done) => {
-      setTimeout(() => {
-        get();
-        done();
-      }, 0);
+      if (url) { // does this actually work?
+        setTimeout(() => {
+          get();
+          done();
+        }, 200);
+      }
     };
   }
 }
@@ -1024,6 +1026,11 @@ when we reach the end of the page's content (defined by `div.content` which
 we'll add in a minute). We need to use `setTimeout` because otherwise the
 results could get spliced, I think.
 
+> `setTimeout` waits for 200ms here just so you can see the spinner in action.
+> This is just an arbitrary wait, so feel free to set it to `0` to speed things
+> up. However, what you _can't_ do is remove `setTimeout` altogether and just
+> call `get`. This will splice the results as mentioned already.
+
 For `infiniteScroll` to work, we need to wrap our content in `div.content`.
 Actually, Onsen UI wraps your content in `div.content` at compile time but we
 can do it explicitly here. We'll also add a spinner so that when the user
@@ -1035,26 +1042,116 @@ loaded:
 
   <ons-list id="pokemon-list">
   </ons-list>
-
-  <div class="after-list">
+  <div class="after-list" style="margin: 20px; text-align: center;">
     <ons-icon icon="fa-spinner" size="26px" spin></ons-icon>
   </div>
 
 </div>
 ```
 
+Run the app and have a look at the list again. First we see that some Pokemon
+have been loaded in the list from the start. Scroll to the bottom of the list
+and you should briefly see the spinner to indicate that the next results are
+loading. Then the API call will finish and the next results will be added to the
+list. Scroll to the bottom and repeat forever.
+
 > > - This is regular old JavaScript; nothing specific to Onsen UI here
 > > - Don't forget the bloomin' styling
+> > - What happens when we don't get a new URL? Fix this or face the
+> >   consequences. (Or flee town, cowboy.)
 
 ### Caching in local storage
 
-- Add local storage caching as well
-  - Why cache? Because the PokeAPI people would get mad if we didn't
-  - Also it will work better offline
-  - Caching sucks for anything big but we're just within reasonable bounds for
-    the amount of data we're storing
-  - And it's just strings so that's fine too
-- And don't forget the button to clear local storage as an aside
+As the outstandingly moral people that we are, we should really cache the
+results of the API calls so we don't put unnecessary strain on PokeAPI. At the
+moment, when the app is closed, the whole Pokemon list is lost and we have to
+get all the data all over again next time we open the app.
+
+Since we're just using regular old JavaScript here, we can use local storage to
+store the Pokemon. Local storage is good for storing a few strings here and
+there. It will work for our purposes (probably) but for anything serious, you
+should look into a proper caching solution. I'd love to recommend one to you but
+I don't know any. I bet you thought I knew what I was talking about. Well, I've
+got bad news for you, budderoo.
+
+First off we'll define a couple of constants that will help us store the Pokemon
+in the right place. These will be used to create the keys in local storage:
+
+```javascript
+if (target.matches('#pokemon')) {
+  // local storage keys
+  const URL = 'pokemon__url';
+  const PREFIX = 'pokemon__';
+```
+
+Instead of saving the next URL in the `url` variable, we'll now store it in
+local storage with the key `pokemon__url`. The name of each Pokemon will also be
+stored in local storage, with its key being `pokemon__` and then its number. For
+example, Bulbasaur is number 1, so will be saved as `pokemon__1` in local
+storage.
+
+When the Pokemon list page is initialised, we should load all the Pokemon we
+already have cached. We can do this by looping through all the Pokemon numbers
+starting from 1, until we don't get a result from the cache:
+
+```javascript
+let pokemonCount = 1;
+let storedPokemon;
+while ((storedPokemon = localStorage.getItem(PREFIX + pokemonCount)) !== null) {
+  console.log(`got ${storedPokemon} from local with key ${PREFIX + pokemonCount}`);
+  // THE CODE TO APPEND TO THE LIST SHOULD GO HERE
+  pokemonCount++;
+}
+```
+
+If we don't already have a URL cached at initialization, we ought to set it to
+the URL for the first page of results:
+
+```javascript
+if (!localStorage.getItem(URL)) {
+  localStorage.setItem(URL, 'https://pokeapi.co/api/v2/pokemon');
+}
+```
+
+Right, that's it for getting the cached stuff when we initialise the app. Now to
+store it in the first place. Modify `get` like so:
+
+```javascript
+const get = async () => {
+  // do the API call and get JSON response
+  const response = await fetch(localStorage.getItem(URL));
+  const json = await response.json();
+
+  const newPokemon = json.results.map(e => e.name);
+
+  const list = document.querySelector('#pokemon-list');
+  newPokemon.forEach((name) => {
+    list.appendChild(ons.createElement(`
+      <ons-list-item expandable>
+        ${name}
+        <div class="expandable-content">
+          <ons-button onclick="savePokemon(pokemonCount, this)">Save</ons-button>
+        </div>
+      </ons-list-item>
+    `));
+
+    const key = PREFIX + pokemonCount;
+    console.log(`Storing ${name} as ${key}`);
+    localStorage.setItem(key, name)
+    pokemonCount++;
+  });
+
+  url = json.next;
+};
+```
+
+> > - Add local storage caching as well
+> >   - Why cache? Because the PokeAPI people would get mad if we didn't
+> >   - Also it will work better offline
+> >   - Caching sucks for anything big but we're just within reasonable bounds for
+> >     the amount of data we're storing
+> >   - And it's just strings so that's fine too
+> > - And don't forget the button to clear local storage as an aside
 
 ### Lazy list
 
