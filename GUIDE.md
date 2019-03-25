@@ -991,6 +991,117 @@ Nothing useful in the gallery yet, but our time is gonna come.
 
 ### Rose and Valerie, screaming from the gallery
 
+Onsen UI provides a pretty **nifty** component for creating galleries and other
+swipeable affairs. A carousel displays an item on the screen, and then can be
+made to move to show the next or previous item in the carousel.
+
+The two components we are going to need are `ons-carousel` and
+`ons-carousel-item`. In the same vein as `ons-list` and `ons-list-item`,
+`ons-carousel` defines the carousel and all its children are defined by
+`ons-carousel-item`.
+
+Create `gallery.html` and add this markup to it:
+
+```html
+<ons-page id="gallery">
+  <style>
+  </style>
+
+  <script>
+  </script>
+
+  <ons-toolbar id="picture-toolbar">
+    <div class="left">
+      <ons-back-button></ons-back-button>
+    </div>
+  </ons-toolbar>
+
+  <ons-carousel id="carousel" fullscreen swipeable auto-scroll auto-scroll-ratio="0.1"></ons-carousel>
+</ons-page>
+```
+
+The only thing new here is the carousel. It has quite a few attributes set to
+tweak the behaviour. Let's go over the meaning of each of these briefly:
+
+  - `fullscreen`: The carousel should take up all of the available content
+    space.
+  - `swipeable`: The user can swipe left and right (or up and down for a
+    vertical carousel). This moves to the next or previous item. The other way
+    to move the carousel is by calling one of the methods that moves it.
+  - `auto-scroll`: Snap to items. In other words, the carousel can't ever stop
+    moving in between items.
+  - `auto-scroll-ratio`: How much the carousel needs to be moved before it will
+    snap to the next item. The value is between 0 and 1. We have it set pretty
+    low here.
+
+There are plenty more carousel attributes and methods. Take a look at the API
+docs for the full list.
+
+Now for the JavaScript to make this work. Two things need to happen when the
+carousel is shown:
+
+  1. The carousel needs to update its items with whatever new Pokemon have been
+     saved to the grid since the last time the carousel was shown.
+  2. The carousel needs to move to the correct item for the grid item that was
+     tapped to show the carousel. For example, if the user taps Charizard in the
+     grid, the carousel should show Charizard.
+
+Add this in the script tags of `gallery.html`:
+
+```javascript
+<script>
+  document.addEventListener('show', ({ target }) => {
+    if (target.matches('#gallery')) {
+      const { pokenumber, savedPokemon } = document.querySelector('#navigator').topPage.data;
+
+      const carousel = document.querySelector('#carousel');
+
+      // figure out what new pokemon have been saved since we last showed the carousel
+      // this way we don't accidentally add the same pokemon twice
+      const sliceIndex = carousel.itemCount - savedPokemon.length;
+
+      if (sliceIndex !== 0) { // if there are unadded pokemon
+        const unaddedPokemon = savedPokemon.slice(sliceIndex);
+
+        unaddedPokemon.map(number => {
+          const carouselItem = ons.createElement(`
+            <ons-carousel-item>
+              <ons-card>
+                <img src="img/${number}.png" />
+              </ons-card>
+            </ons-carousel-item>
+          `);
+
+          carousel.appendChild(carouselItem);
+        });
+      }
+
+      // go to the selected pokemon
+      carousel.setActiveIndex(savedPokemon.indexOf(pokenumber));
+    }
+  });
+</script>
+```
+
+Again we have an event listener on the page's `show` event, so the callback
+function will be run every time the gallery page is shown.
+
+The grid page will pass in some data that we need to the navigator when the
+gallery page is pushed. This is accessed from `ons-navigator.topPage.data`.
+`data` is an object containing whatever was passed in from the previous page. In
+this case, the pushed data consists of the number of the Pokemon that was tapped
+in the grid, and the list of Pokemon that have been saved.
+
+The slice code figures out the difference between the Pokemon already in the
+carousel and the list of saved Pokemon we received from the grid page, and from
+that we know what Pokemon are not yet in the carousel. We add them.
+
+Then all that remains is to move the carousel to the image of the tapped
+Pokemon. `ons-carousel`'s `setActiveIndex` function is what we need here.
+
+Right, enough talk, more execution (said Yurovsky to the Tsar). Swip-swipe away
+to your heart's content.
+
 <!--
 - Introduce carousel
 - Introduce card if we can be bothered
