@@ -7,7 +7,6 @@ show the reader how to use Onsen UI components to build functionality that is co
 - Authenticating user login
 - Paging data from a remote API
 - Displaying large lists efficiently
-- Searching and filtering data
 - Showing a swipeable gallery of images
 
 
