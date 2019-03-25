@@ -2,60 +2,52 @@
 "title": "Onsen UI Guide"
 ---
 
-## Some subtitle
-
-Here is some text about something
-
-> Here is a warning. We're going to set it as a block quote.
-
-```javascript
-const () => console.log('and here is some code');
-```
-
-
 ## Installing and Running
 
-- Is the original not OK here?
-  - NO! Because it doesn't shill Monaca. And anyway, Monaca debugger is very
-    handy here.
-
-- Installation options:
-  - Run in playground
-    - No setup required
-    - Easy to switch between iOS and Android
-    - Can't do multiple files
-  - Monaca CLI
-    - **RECOMMEND THIS ONE**
-      - Will I need to update the templates before I recommend this? If the
-        templates change then the tutorial might be in hot water.
-    - Can develop locally with Monaca debugger which is very good when it
-      doesn't break
-    - Need to create a Monaca account
-    - You will end up with a Cordova app but if you don't know what that is, you
-      can safely ignore it for this tutorial
-    - Get node and then:
-
-    ```
-    npm install -g monaca
-    monaca create tutorial --template onsenui-v2-js-minimum
-    ```
-
-  - Regular old CDN
-    - Good if you live in 2004; bad if you aren't sold on self-flaggelation
-    - Joking aside, this is a fine option, but you'll need to figure out how to
-      make it into an app
-  - JS Frameworks
-    - If you want to use React, Vue or Angular 2+, see the tutorial I haven't
-      written yet
-    - If you want to use AngularJS, see the tutorial that will never be written
-
-## Explanation of project structure
+<!--
+> > - Is the original not OK here?
+> >   - NO! Because it doesn't shill Monaca. And anyway, Monaca debugger is very
+> >     handy here.
+> >
+> > - Installation options:
+> >   - Run in playground
+> >     - No setup required
+> >     - Easy to switch between iOS and Android
+> >     - Can't do multiple files
+> >   - Monaca CLI
+> >     - **RECOMMEND THIS ONE**
+> >       - Will I need to update the templates before I recommend this? If the
+> >         templates change then the tutorial might be in hot water.
+> >     - Can develop locally with Monaca debugger which is very good when it
+> >       doesn't break
+> >     - Need to create a Monaca account
+> >     - You will end up with a Cordova app but if you don't know what that is, you
+> >       can safely ignore it for this tutorial
+> >     - Get node and then:
+> >
+> >     ```
+> >     npm install -g monaca
+> >     monaca create tutorial --template onsenui-v2-js-minimum
+> >     ```
+> >
+> >   - Regular old CDN
+> >     - Good if you live in 2004; bad if you aren't sold on self-flaggelation
+> >     - Joking aside, this is a fine option, but you'll need to figure out how to
+> >       make it into an app
+> >   - JS Frameworks
+> >     - If you want to use React, Vue or Angular 2+, see the tutorial I haven't
+> >       written yet
+> >     - If you want to use AngularJS, see the tutorial that will never be written
+-->
 
 ## Login page
 
 Let's create the first screen. Each screen in Onsen UI is called a "page". The
 Onsen UI page component is called `ons-page`. Add the following in the body of
 `index.html`:
+
+> For Monaca CLI users, you'll find `index.html` in the `www` directory. All
+> source files go in `www`.
 
 ```html
 <body>
@@ -122,6 +114,7 @@ Notice that we have set the `modifier` attribute of the two input boxes.
 See the API pages for details of what modifiers are available. Try using them in
 this login form to change the appearance of the button and input boxes.
 
+<!--
 > > - Open up `www/index.html`
 > > - In the body, add:
 > >
@@ -160,6 +153,7 @@ this login form to change the appearance of the button and input boxes.
 > >
 > > - (Boy, it certainly got ugly quickly.)
 > > - Run the app, punch the air
+-->
 
 
 ### Adding JavaScript
@@ -203,10 +197,12 @@ notifications in the API pages.
 > and password every time we want to run the app. While you're developing, set
 > the correct username and password to empty strings to save time.
 
+<!--
 > > - Now make the button work
 > >   - Introduce the `script` tag
 > >   - Set `onclick` and say it's just exactly the same as a normal button but it
 > >     looks better. Make the click show an Onsen alert.
+-->
 
 ## Navigator and logging in for real(-ish)
 
@@ -342,6 +338,7 @@ looks in the current file for templates with `id="home.html"`, and then looks
 for files called `home.html`. This is why nothing broke when we moved the home
 page out of a template and into its own file.
 
+<!--
 > > - Talk about pages
 > > - Make a new page
 > >   - Recommend now that any children still in the playground should grow up and
@@ -356,6 +353,7 @@ page out of a template and into its own file.
 > >     to the new page if all is good
 > >   - At this point, warn any morons that you shouldn't store the username and
 > >     password in your HTML in real life
+-->
 
 ## Toolbar
 
@@ -691,10 +689,12 @@ handy tool for this called Onsen UI [Theme
 Roller](https://onsen.io/theme-roller/). Once I know how to use it I'll let you
 know.
 
+<!--
 > > - Figure out how to use the theme roller
 > > - Make a red theme to match our Pokemon app
 > > - Download the theme and add it to the app styles
 > > - At this point playground scrubs really should give up
+-->
 
 ### Structure of the app
 
@@ -728,7 +728,9 @@ you are sure what should be a tab and what should be a regular page.
 > giving you two elements with the same ID. In general, there are better ways
 > to handle a page that is sometimes a normal page and sometimes a tab.
 
+<!--
 > > - Add a new tab for the pokemon list page
+-->
 
 ## Events
 
@@ -859,12 +861,14 @@ compiler by writing the compiler output in your HTML file to begin with. This is
 helpful whenever you want to access things that the compiler does automatically,
 such as adding a top part to an expandable list item.
 
+<!--
 > > What a dreadful explanation ^
 
 > > - Do expandable list with Save button here
 > >   - But wait, that's bad UI! (Well, that's a problem for U, not I.)
 > >
 > > - Add save functionality now or once we have the grid?
+-->
 
 ## Grid and carousel
 
@@ -905,22 +909,92 @@ const addPokemonToGrid = pokenumber => {
 };
 ```
 
-### Making the grid
-
-- Nothing special Onsen UI-wise so just chuck the code at 'em and vamoose
+### Grid
 
 #### Static assets (or whatever it's called)
 
+Getting all the sprites over the internet every time we want to see them is a
+bad idea. Some people will be using the app over a mobile connection and we
+don't want to suck up all their data. So we download all the sprites and save
+them as static assets.
+
+Download and unzip https://github.com/PokeAPI/sprites/archive/master.zip.
+
+Then make a directory `./www/img` and stick the all the sprites in there.
+They're named by Pokemon number - very helpful for us.
+
+<!--
 - Get the static images
 - Do we need to curl them or is there a zip file somewhere or what?
   - Check the other Pokedex sample app to find out
 - These get saved in... I don't know.
 - But once they are saved we can reference them as easy as lemons
+-->
+
+#### Making the grid
+
+We have the sprites, we have the code to save Pokemon, we have the やる気; let's
+grid this mother!
+
+Actually, there is no need for special Onsen UI components here, so we'll just
+use some regular HTML and CSS. Add this to `grid.html`:
+
+```html
+<ons-page id="grid">
+  <style>
+    #grideroo {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-auto-rows: 33vw;
+      background-color: black;
+    }
+
+    #grideroo img {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+  <script>
+    let savedPokemon = [];
+
+    const addPokemonToGrid = pokenumber => {
+      // we save a list so we can pass it to the card carousel thing
+      savedPokemon.push(pokenumber);
+
+      // now add the new pokemon to the grid
+      const grid = document.querySelector('#grideroo');
+      const cell = document.createElement('div');
+      cell.onclick = () => document.querySelector('#navigator').bringPageTop('card.html', { data: { pokenumber, savedPokemon } });
+
+      const image = document.createElement('img');
+      image.setAttribute('src', `img/${pokenumber}.png`); // IS THAT PATH CORRECT?
+
+      cell.appendChild(image);
+      grid.appendChild(cell);
+    };
+  </script>
+
+  <div id="content">
+    <div id="grideroo"></div>
+  </div>
+</ons-page>
+```
+
+With a bit of luck, you can now save a Pokemon from the list and have its
+picture show up in the grid. Tapping the image takes you to the gallery view.
+Nothing useful in the gallery yet, but our time is gonna come.
+
+<!--
+- Nothing special Onsen UI-wise so just chuck the code at 'em and vamoose
+-->
 
 ### Rose and Valerie, screaming from the gallery
 
+<!--
 - Introduce carousel
 - Introduce card if we can be bothered
+-->
 
 ## Page data from server
 
@@ -1055,10 +1129,12 @@ and you should briefly see the spinner to indicate that the next results are
 loading. Then the API call will finish and the next results will be added to the
 list. Scroll to the bottom and repeat forever.
 
+<!--
 > > - This is regular old JavaScript; nothing specific to Onsen UI here
 > > - Don't forget the bloomin' styling
 > > - What happens when we don't get a new URL? Fix this or face the
 > >   consequences. (Or flee town, cowboy.)
+-->
 
 ### Caching in local storage
 
@@ -1170,6 +1246,7 @@ const clearLocalStorage = () => {
 }
 ```
 
+<!--
 > > - Add local storage caching as well
 > >   - Why cache? Because the PokeAPI people would get mad if we didn't
 > >   - Also it will work better offline
@@ -1177,6 +1254,7 @@ const clearLocalStorage = () => {
 > >     the amount of data we're storing
 > >   - And it's just strings so that's fine too
 > > - And don't forget the button to clear local storage as an aside
+-->
 
 ### Lazy list
 
@@ -1293,12 +1371,14 @@ const get = async () => {
 
 Run the app. Smooth as a baby's bottom, <del>and just as entertaining</del>.
 
+<!--
 > > - It's going to get horribly slow if we load those 900-odd Pokemon all into the
 > >   DOM.
 > > - To make it more slip-slidy fun, let's use lazy instead
 > > - It kills the items you can't see so everything is a bit faster
 > > - You need to set up the delegate object for it to work
 > > - You also need to remember to refresh it
+-->
 
 
 
