@@ -1145,6 +1145,31 @@ const get = async () => {
 };
 ```
 
+While we're testing the local storage functionality, it's going to be useful to
+be able to clear local storage manually. This is because the app will assume
+that all the data we've already stored in local storage has been stored
+correctly, but mere mortals are unlikely to get the code right first time. Or
+even if you're just playing about with the code it will be handy. So we should
+add a button to the side-menu (in `index.html`):
+
+```javascript
+<ons-list>
+  <ons-list-item onclick="load('about.html')">
+    About
+  </ons-list-item>
+  <ons-list-item onclick="clearLocalStorage()">
+    Clear local storage
+  </ons-list-item>
+</ons-list>
+```
+
+```javascript
+const clearLocalStorage = () => {
+  localStorage.clear();
+  ons.notification.alert('Cleared local storage');
+}
+```
+
 > > - Add local storage caching as well
 > >   - Why cache? Because the PokeAPI people would get mad if we didn't
 > >   - Also it will work better offline
@@ -1155,12 +1180,125 @@ const get = async () => {
 
 ### Lazy list
 
-- It's going to get horribly slow if we load those 900-odd Pokemon all into the
-  DOM.
-- To make it more slip-slidy fun, let's use lazy instead
-- It kills the items you can't see so everything is a bit faster
-- You need to set up the delegate object for it to work
-- You also need to remember to refresh it
+`ons-list-item` worked well when we only had a few items in the list, but if you
+try scrolling about once all 900 or so Pokemon have been loaded, you might
+notice things starting to slow up a bit. When a new `ons-list-item` gets added
+to the DOM, it stays there forever (unless we manually destroy it). That means
+the app has to cope with over 900 list items when the list is fully loaded. But
+the user only sees a small fraction of those list items at once, so the rest
+don't really need to be in the DOM.
+
+Enter <del>the dragon</del> `ons-lazy-repeat`. `ons-lazy-repeat` can be used to
+display very large and even infinite lists without a drop in performance. It is
+a child element of `ons-list`. Let's add one to the Pokemon list now:
+
+```html
+<ons-list id="pokemon-list">
+  <ons-lazy-repeat id="lazy"></ons-lazy-repeat>
+</ons-list>
+```
+
+That's straightforward. Now we need a bit of JavaScript to bend the lazy repeat
+to our will.
+
+`ons-lazy-repeat` has a property called `delegate`, which is an object
+containing functions that it uses to render list items. We need to write two of
+those functions: `createItemContent`, which receives an index number of the item
+to be created and should return an Element; and `countItems`, which returns the
+total number of items in the list.
+
+> At this point you might reasonably ask what the hell `countItems` is supposed
+> to return for an infinite list. Good question; answer to be discovered. (And
+> the answer appears not to be "NaN" or "Infinity".)
+
+```javascript
+document.querySelector('#lazy').delegate = {
+  createItemContent: i => {
+    return ons.createElement(`
+      <ons-list-item
+        expandable
+      >
+        ${i + 1} ${items[i]}
+
+        <div class="expandable-content">
+          <ons-button onclick="savePokemon(${i + 1}, this)">Save</ons-button>
+        </div>
+      </ons-list-item>
+    `);
+  },
+  countItems: () => {
+    return items.length;
+  }
+};
+```
+
+Ah, hold on, `createItemContent` only receives an index number. We better save
+those Pokecritters in an array so we know what to load. When we get a new
+Pokemon, we need to save it in _both_ local storage and an array of items. Then
+when the app loads, instead of reading local storage and appending everything to
+the DOM, we need to put Pokemon in local storage in the items array and then
+call `ons-lazy-repeat`'s `refresh` method. Then `ons-lazy-repeat` will handle
+adding the contents of the items array to the DOM.
+
+> Every time the content of your items array changes, remember to call `refresh`,
+> or the new items won't appear in the app. In this tutorial, there are two
+> points when we need to call refresh: when the items are initially loaded from
+> local storage, and every time new items are received from an API call.
+
+First off, let's create a tasty array. Yim yum.
+
+```javascript
+let items = [];
+```
+
+Change the looping bit from local storage like this:
+
+```javascript
+let pokemonCount = 0;
+let storedPokemon;
+while ((storedPokemon = localStorage.getItem(PREFIX + pokemonCount)) !== null) {
+  //console.log(`got ${storedPokemon} from local with key ${PREFIX + pokemonCount}`);
+  items[pokemonCount] = storedPokemon;
+  pokemonCount++;
+}
+```
+
+And change `get` like so:
+
+```javascript
+const get = async () => {
+  // do the API call and get JSON response
+  const response = await fetch(localStorage.getItem(URL));
+  const json = await response.json();
+
+  // save the number of items before adding the new ones we just got
+  const previousLength = items.length;
+
+  // add new items
+  const newPokemonCapitalised = json.results.map(e => e.name.charAt(0).toUpperCase() + e.name.slice(1));
+  items.push(...newPokemonCapitalised);
+
+  // save new items and next url in local storage
+  newPokemonCapitalised.forEach((name, i) => {
+    const key = PREFIX + (previousLength + i);
+    //console.log(`Storing ${name} as ${key}`);
+    localStorage.setItem(key, name)
+  });
+  localStorage.setItem(URL, json.next);
+
+  // reload the list with new items
+  lazy.refresh();
+};
+```
+
+Run the app. Smooth as a baby's bottom, <del>and just as entertaining</del>.
+
+> > - It's going to get horribly slow if we load those 900-odd Pokemon all into the
+> >   DOM.
+> > - To make it more slip-slidy fun, let's use lazy instead
+> > - It kills the items you can't see so everything is a bit faster
+> > - You need to set up the delegate object for it to work
+> > - You also need to remember to refresh it
 
 
 
