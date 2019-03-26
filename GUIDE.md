@@ -43,20 +43,24 @@
 ## Login page
 
 Let's create the first screen. Each screen in Onsen UI is called a "page". The
-Onsen UI page component is called `ons-page`. Add the following in the body of
-`index.html`:
+Onsen UI page component is called `ons-page`. Delete the contents of the
+`<body>` of `index.html` (leave in everything else) and replace it with the
+following:
 
 > For Monaca CLI users, you'll find `index.html` in the `www` directory. All
 > source files go in `www`.
 
 ```html
-<body>
-  <ons-page></ons-page>
-</body>
+<ons-page></ons-page>
 ```
 
 Run the app on your device or browser and you will see screen is a light gray
 color. This is the `ons-page` component.
+
+> `monaca debug` is the Monaca CLI command to run the project on your device.
+> For this you will need Monaca Debugger installed on your device (available in
+> the app store). If you just want to view the app in your browser, run `monaca
+> preview`.
 
 Typically, everything that you want to display in a page should go within
 `ons-page` tags. This way Onsen UI will automatically position your elements
@@ -70,33 +74,32 @@ These form components work mostly the same way as regular HTML form elements
 such as `input`, but the Onsen UI ones will be automatically styled to match the
 device your app is running on.
 
-Add this to `index.html`:
+Within the `<body>` tag of `index.html`, remove the `<ons-page></ons-page>` and
+replace it with:
 
 ```html
-<body>
-  <ons-page>
-    <div style="text-align: center; margin-top: 50%">
-    <p>
-      <ons-input id="username" placeholder="Username" modifier="underbar"></ons-input>
-    </p>
+<ons-page>
+  <div style="text-align: center; margin-top: 200px">
+  <p>
+    <ons-input id="username" placeholder="Username" modifier="underbar"></ons-input>
+  </p>
 
-    <p>
-      <ons-input
-        id="password"
-        placeholder="Password"
-        type="password"
-        modifier="underbar"
-      >
-      </ons-input>
-    </p>
+  <p>
+    <ons-input
+      id="password"
+      placeholder="Password"
+      type="password"
+      modifier="underbar"
+    >
+    </ons-input>
+  </p>
 
-    <p>
-      <ons-button>Sign in</ons-button>
-    </p>
-    </div>
+  <p>
+    <ons-button>Sign in</ons-button>
+  </p>
+  </div>
 
-  </ons-page>
-</body>
+</ons-page>
 ```
 
 Most of this should look familiar to you as regular HTML with some styling, but
@@ -111,8 +114,17 @@ equivalent of `button`.
 
 Notice that we have set the `modifier` attribute of the two input boxes.
 `modifier` allows you to easily change the appearance of an Onsen UI component.
-See the API pages for details of what modifiers are available. Try using them in
-this login form to change the appearance of the button and input boxes.
+In this case we are using the `underbar` modifier, which puts a horizontal line
+at the bottom of the input box.
+
+Try changing the appearance of `ons-button` by setting its modifier attribute.
+Available values include `quiet` and `cta` (call to action).
+
+To see the full list of available modifiers for a component, look at its API
+page in the documentation.
+
+> Some modifiers are available for iOS but not Android, and vice-versa. Make
+> sure to check how your app looks on multiple devices.
 
 <!--
 > > - Open up `www/index.html`
@@ -159,43 +171,52 @@ this login form to change the appearance of the button and input boxes.
 ### Adding JavaScript
 
 We have a pretty login form now, but when we click the button, nothing happens.
-To that fix let's add a bit of JavaScript. In the `script` tags in the head of
-`index.html`, add this:
+To fix that let's add a bit of JavaScript.
 
-```html
-<script>
-  const login = () => {
-    const username = document.querySelector('#username');
-    const password = document.querySelector('#password');
+Replace the contents of the `<script>` tag in `index.html` with this:
 
-    if (username === 'USERNAME' && password === 'PASSWORD') {
-      ons.notification.alert('Correct!');
-    } else {
-      ons.notification.alert('Wrong username/password combination');
-    }
+```javascript
+const login = () => {
+  const username = document.querySelector('#username').value;
+  const password = document.querySelector('#password').value;
+
+  if (username === 'user' && password === 'pass') {
+    ons.notification.alert('Correct!');
+  } else {
+    ons.notification.alert('Wrong username/password combination');
   }
-</script>
+}
 ```
 
-> This tutorial uses arrow functions insted of the `function` keyword.
+> This tutorial uses arrow functions instead of the `function` keyword.
 
-Then set the button to run the `login` function when it is clicked:
+Then set the button to run the `login` function when it is clicked by adding the
+`onclick` attribute to the `ons-button` we already defined:
 
 ```html
 <ons-button onclick="login()">Sign in</ons-button>
 ```
 
 Run the app again. Enter a username and password and click 'Submit'. An alert
-will pop up telling you whether your login was successful.
+will pop up telling you whether your login was successful. (From the code, you
+can see the only username and password combination that will be accepted is
+'user' and 'pass'.)
+
+> In real life, don't actually put your username and password in HTML because
+> anyone can see what they are by looking at the page source. For the purposes
+> of this tutorial though, it's fine.
+
+### Notifications
 
 In plain JavaScript we would use `alert` to show an alert, but Onsen UI has its
 own notifications. There are several different notifications available, but the
-one used here is `ons.notification.alert`. See more about the available
-notifications in the API pages.
+one used here is `ons.notification.alert`.
 
-> It's quickly going to get annoying if we have to keep typing in the username
-> and password every time we want to run the app. While you're developing, set
-> the correct username and password to empty strings to save time.
+Try switching `ons.notification.alert` for something different. You could try
+`ons.notification.toast` or `ons.notification.confirm`, for example.
+
+See more about the available notifications in the API pages.
+
 
 <!--
 > > - Now make the button work
@@ -211,12 +232,10 @@ successfully logs in, so let's create a new page.
 
 ### Templates
 
-Add the following to `index.html`, _outside_ the `ons-page` tag:
+Add the following to `index.html`, _outside_ the `ons-page` tag but still
+_inside_ the body:
 
 ```html
-...
-</ons-page>
-
 <template id="home.html">
   <ons-page id="home">
     Hello!
@@ -230,7 +249,8 @@ the app starts and will only be created when the page is shown.
 ### Navigator
 
 To move between pages, use the `ons-navigator` component. `ons-navigator`
-provides methods for pushing or popping pages to and from the **page stack**.
+provides methods for pushing and popping pages to and from the **page stack**.
+
 The page stack is a stack of screens that represents the order of pages in the
 app. For example, when the first page is shown, that page is the only page in
 the page stack. If you navigate to a new page, the new page is pushed on top of
@@ -238,41 +258,40 @@ the page stack, leaving two pages total on the stack. If you go back, the second
 page is popped from the page stack and the first page is shown again.
 
 `ons-navigator` wraps an initial page. This lets it know which page it should
-show at startup. Put the `ons-navigator` around the login page:
+show at startup. Put the `ons-navigator` around the login page. The body of
+`index.html` should now be:
 
 ```html
-<body>
-  <ons-navigator id="navigator">
-    <ons-page>
-      <div style="text-align: center; margin-top: 50%">
-      <p>
-        <ons-input id="username" placeholder="Username" modifier="underbar"></ons-input>
-      </p>
+<ons-navigator id="navigator">
+  <ons-page>
+    <div style="text-align: center; margin-top: 200px">
+    <p>
+      <ons-input id="username" placeholder="Username" modifier="underbar"></ons-input>
+    </p>
 
-      <p>
-        <ons-input
-          id="password"
-          placeholder="Password"
-          type="password"
-          modifier="underbar"
-        >
-        </ons-input>
-      </p>
+    <p>
+      <ons-input
+        id="password"
+        placeholder="Password"
+        type="password"
+        modifier="underbar"
+      >
+      </ons-input>
+    </p>
 
-      <p>
-        <ons-button>Sign in</ons-button>
-      </p>
-      </div>
+    <p>
+      <ons-button onclick="login()">Sign in</ons-button>
+    </p>
+    </div>
 
-    </ons-page>
-  </ons-navigator>
+  </ons-page>
+</ons-navigator>
 
-  <template id="home.html">
-    <ons-page id="home">
-      Hello!
-    </ons-page>
-  </template>
-</body>
+<template id="home.html">
+  <ons-page id="home">
+    Hello!
+  </ons-page>
+</template>
 ```
 
 Run the app. It looks the same as before, but now we can get the navigator to
@@ -284,7 +303,8 @@ const login = () => {
   const username = document.querySelector('#username');
   const password = document.querySelector('#password');
 
-  if (username === 'USERNAME' && password === 'PASSWORD') {
+  if (username === 'user' && password === 'pass') {
+    // call the navigator to move to the new page
     const navigator = document.querySelector('#navigator');
     navigator.resetToPage('home.html');
   } else {
@@ -296,9 +316,11 @@ const login = () => {
 Run the app, enter the correct username and password, and tap the login button.
 The home page will be shown.
 
-> In real life, don't actually put your username and password in HTML because
-> anyone can see what they are by looking at the page source. For the purposes
-> of this tutorial though, it's fine.
+> It's quickly going to get annoying if we have to keep typing in the username
+> and password every time we want to run the app. While you're developing, set
+> the correct username and password to empty strings to save time.
+
+#### resetToPage
 
 Let's examine the code we just added. We get a reference to the navigator and
 then call its `resetToPage` method with the argument `'home.html'`.
