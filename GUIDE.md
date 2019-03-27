@@ -350,8 +350,8 @@ the __body__ of the home page template from `index.html` (_not including the
 </ons-page>
 ```
 
-Delete the template from `index.html` and the run app. Everything should still
-work as before.
+Delete the `<template>` tag and its contents from `index.html` and the run app.
+Everything should still work as before.
 
 This brings up an important point: Onsen UI pages can be defined either as
 templates using the `template` element, _or_ in their own file. When we call
@@ -380,7 +380,8 @@ page out of a template and into its own file.
 ## Toolbar
 
 The home page could use a little more styling. Let's add a toolbar to make it
-look better. For this we need the `ons-toolbar` component:
+look better. For this we need the `ons-toolbar` component. Add it to
+`home.html`, so that `home.html` becomes:
 
 ```html
 <ons-page id="home">
@@ -397,10 +398,19 @@ with class `center`. `div.center` describes what should go in the middle of the
 toolbar. You can also use `div.left` and `div.right` to position elements to the
 left and right of the toolbar.
 
+Run the app, log in to move to the Home page, and you should now see a toolbar
+with the text "Home" in the center.
+
+##### Next steps
+
+Try adding `div.left` and `div.right` to the toolbar (in the same way as
+`div.center` has already been added). Notice how using the `left` and `right`
+classes automatically positions each `div` in the correct place.
+
 ## Splitter menu to About page
 
-Now let's see how to add a collapsable side-menu. We're going to add links to
-other pages in the side-menu, so let's create a new page. Create a new file
+Now let's see how to add a collapsable side menu. We're going to add links to
+other pages in the side menu, so let's create a new page. Create a new file
 `about.html` and paste this:
 
 ```html
@@ -410,22 +420,20 @@ other pages in the side-menu, so let's create a new page. Create a new file
   </ons-toolbar>
 
   This is the about page.
-</ons-about>
+</ons-page>
 ```
 
-We'll also need a button to open the side-menu, so let's add one to the left of
-the home page toolbar, complete with a function that we'll define in a minute:
+We'll also need a button to open the side menu, so let's add one to the left of
+the home page toolbar, complete with a function `openMenu` that we'll define in
+a minute. Paste the following inside the `ons-toolbar` in `home.html` (so now
+there should be `div.center` and `div.left`):
 
 ```html
-<ons-toolbar id="home-toolbar">
-  <div class="center">Home</div>
-
-  <div class="left">
-    <ons-toolbar-button oncick="openMenu()">
-      <ons-icon icon="md-menu"></ons-icon>
-    </ons-toolbar-button>
-  </div>
-</ons-toolbar>
+<div class="left">
+  <ons-toolbar-button onclick="openMenu()">
+    <ons-icon icon="md-menu"></ons-icon>
+  </ons-toolbar-button>
+</div>
 ```
 
 Two new components worth mentioning here:
@@ -437,40 +445,72 @@ adds some extra styling to make the button fit the look of the toolbar.
 ### Icons
 
 Secondly, `ons-icon`: Whenever you want to display an icon, use this component.
-The specific icon is defined in the `icon` attribute. There are Ionicons for
-iOS, Material Design icons for Android, and Font Awesome icons. Each type of
-icon has its own prefix: `ion-`, `md-`, and `fa-`, respectively. For examples of
-`ons-icon` usage, see the API page.
+The specific icon is defined in the `icon` attribute.
+
+There are Ionicons for iOS, Material Design icons for Android, and Font Awesome
+icons. Each type of icon has its own prefix: `ion-`, `md-`, and `fa-`,
+respectively.
+
+The simplest usage of the `icon` attribute is to define one icon for all
+platforms, such as `icon="md-menu"`. However, you probably want to display
+Ionicons on iOS devices, and Material Icons on Android devices. This is easily
+achieved with the following special syntax:
+
+```html
+<ons-icon
+  icon="ion-navicon, material:md-menu">
+</ons-icon>
+```
+
+This tells Onsen UI to show the icon with the `material:` prefix on Android
+devices (in this case, `md-menu`), and the other icon for iOS devices (here
+`ion-navicon`). This way your app's icons can look native on all devices.
+
+##### Next steps
+
+Try some different values for the `icon` attribute and see what the result is.
+For example, you could try `icon="md-face"`.
+
+Or how about `icon="fa-spinner"`? With this one you should also try setting the
+`spin` attribute:
+
+```html
+<ons-icon icon="fa-spinner" spin></ons-icon>
+```
+
+For more examples of `ons-icon` usage and to see the full list of available
+icons, see the API page.
 
 ### Splitter
 
-Side-menus are created in Onsen UI by using the `ons-splitter-` components.
+Side menus are created in Onsen UI by using the `ons-splitter-` components.
 There is a parent component `ons-splitter`. It has two children:
-`ons-splitter-side` which contains everything that should appear in the
-side-menu; and `ons-splitter-content` which defines everthing _outside_ the side
+`ons-splitter-side`, which contains everything that should appear in the side
+menu; and `ons-splitter-content`, which defines everthing _outside_ the side
 menu. This means that `ons-splitter` effectively wraps the whole app.
 
-We're about to rewrite the body of `index.html` so first let's move the login
-page to a new file `login.html`:
+We're about to rewrite the body of `index.html`, so first let's move the login
+page to a new file `login.html`. Create `login.html` and paste the following in
+it:
 
 ```html
-<ons-page>
+<ons-page id="login">
   <script>
-    const login = {
+    const login = () => {
       const username = document.querySelector('#username').value;
       const password = document.querySelector('#password').value;
 
       if (username === '' && password === '') {
+        // call the navigator to move to the new page
         const navigator = document.querySelector('#navigator');
-
-        navigator.resetToPage('home.html', { animation: 'fade' });
+        navigator.resetToPage('home.html');
       } else {
-        ons.notification.alert('bad');
+        ons.notification.alert('Wrong username/password combination');
       }
     };
   </script>
 
-  <div style="text-align: center; margin-top: 50%">
+  <div style="text-align: center; margin-top: 200px">
   <p>
     <ons-input id="username" placeholder="Username" modifier="underbar"></ons-input>
   </p>
@@ -486,38 +526,41 @@ page to a new file `login.html`:
   </p>
 
   <p>
-    <ons-button>Sign in</ons-button>
+    <ons-button onclick="login()">Sign in</ons-button>
   </p>
   </div>
 
 </ons-page>
 ```
 
-Notice that we also copied the `login` function and put it in a `script` tag.
-Strictly this isn't necessary but it's good practice to keep helper functions
-with the HTML they are called from.
+Notice that we also copied the `login` function and put it in a `<script>` tag.
+Strictly speaking we could leave it in `index.html`, but it's good practice to
+keep helper functions with the HTML they are called from. Delete the `login`
+function from `index.html`.
 
-Now change the body of `index.html` to:
+Now delete the contents of `index.html`'s `<body>` tag and replace it with:
 
 ```html
-<body>
-  <ons-splitter>
-    <!-- The side-menu -->
-    <ons-splitter-side id="menu" collapse>
-    </ons-splitter-side>
+<ons-splitter>
+  <!-- The side menu -->
+  <ons-splitter-side id="menu" collapse width="220px">
+    <ons-page></ons-page>
+  </ons-splitter-side>
 
-    <!-- Everything not in the side-menu -->
-    <ons-splitter-content>
-      <ons-navigator id="navigator" page="login.html"></ons-navigator>
-    </ons-splitter-content>
-  </ons-splitter>
-</body>
+  <!-- Everything not in the side menu -->
+  <ons-splitter-content>
+    <ons-navigator id="navigator" page="login.html"></ons-navigator>
+  </ons-splitter-content>
+</ons-splitter>
 ```
 
-If you open the app now, you won't see the side-menu. We need to add a way to
-open it. We don't want to be able to open the side-menu from the login page, but
-we do want to be able to open it from the home page. Now it's time to define the
-`openMenu` function we added to the toolbar button in `home.html`:
+We've now defined the side menu, but if you open the app , you won't see it. We
+need to add a way to open it. We don't want to be able to open the side menu
+from the login page, but we do want to be able to open it from the home page.
+Now it's time to define the `openMenu` function we called from the the toolbar
+button.
+
+Add this in `home.html`:
 
 ```html
 <script>
@@ -527,29 +570,18 @@ we do want to be able to open it from the home page. Now it's time to define the
 </script>
 ```
 
+> Note that the `<script>` tag must go _inside_ `ons-page` for files that define
+> a standalone page. The navigator expects each standalone page file to contain
+> only one root element, so it will break if both `<script>` and `ons-page` are
+> defined at the top level of a file.
+
 Run the app, hit the login button, add the tap the menu icon at the top left of
-the home page. The side-menu appears!
+the home page. The side menu appears!
+
+### Lists
 
 But there's nothing in it, so let's remedy that now. We are going to put a list
-of links in the side-menu, and for that we need `ons-list` and `ons-list-item`:
-
-```html
-<ons-splitter>
-  <ons-splitter-side id="menu" collapse>
-    <ons-page>
-      <ons-list>
-        <ons-list-item onclick="loadPage('about.html')">
-          About
-        </ons-list-item>
-      </ons-list>
-    </ons-page>
-  </ons-splitter-side>
-
-  <ons-splitter-content>
-    <ons-navigator id="navigator" page="login.html"></ons-navigator>
-  </ons-splitter-content>
-</ons-splitter>
-```
+of links in the side menu, and for that we need `ons-list` and `ons-list-item`.
 
 `ons-list` represents a list - it's the Onsen UI equivalent of `ul`.
 
@@ -559,8 +591,22 @@ position to the left, right and center of `ons-list-item` with `div.left`,
 `div.right` and `div.center`. If you don't define one of these, the list item's
 contents are positioned in the center by default.
 
+Change the `ons-splitter-side` definition in `index.html` to:
+
+```html
+<ons-splitter-side id="menu" collapse>
+  <ons-page>
+    <ons-list>
+      <ons-list-item onclick="loadPage('about.html')">
+        About
+      </ons-list-item>
+    </ons-list>
+  </ons-page>
+</ons-splitter-side>
+```
+
 In the `onclick` attribute of the list item we just defined, we've called a
-function `loadPage`. We need to define it:
+function `loadPage`. We need to define it in the `<script>` tag of `index.html`:
 
 ```javascript
 const loadPage = (page) => {
@@ -569,8 +615,8 @@ const loadPage = (page) => {
 };
 ```
 
-Now when the side-menu is opened, it will contain a link to the About page. Tap
-the link and the About page will be loaded, then the side-menu will close.
+Now when the side menu is opened, it will contain a link to the About page. Tap
+the link and the About page will be loaded, then the side menu will close.
 
 > The `loadPage` function uses `ons-navigator.bringPageTop`. This function
 > pushes a page to the top of the page stack. If the page was already in the
@@ -579,7 +625,7 @@ the link and the About page will be loaded, then the side-menu will close.
 > another method, `pushPage`, which creates a new instance of a page regardless
 > of whether it already exists in the stack. We recommend using `bringPageTop`
 > over `pushPage` to avoid the error of accidentally loading the same page
-> twice, which can cause conflicts and unexpected bugs.
+> twice, which can cause conflicts and tricky bugs.
 
 ## Back button
 
@@ -676,7 +722,7 @@ to "Pokemon"):
     <div class="center">Pokemon</div>
 
     <div class="left">
-      <ons-toolbar-button oncick="openMenu()">
+      <ons-toolbar-button onclick="openMenu()">
         <ons-icon icon="md-menu"></ons-icon>
       </ons-toolbar-button>
     </div>
@@ -727,10 +773,10 @@ review:
 At the top level, there is `ons-splitter`.
  |
  |-- The first child of `ons-splitter` is `ons-splitter-side`. Everything
- |   defined in here specifies what should be in the side-menu.
+ |   defined in here specifies what should be in the side menu.
  |
  |-- The second child of `ons-splitter` is `ons-splitter-content`. Everything
-     apart from the side-menu is defined in here.
+     apart from the side menu is defined in here.
       |
       |-- Within `ons-splitter-side` is `ons-navigator`. The navigator is used to
       |   move between any pages that aren't tabs.
@@ -1359,7 +1405,7 @@ be able to clear local storage manually. This is because the app will assume
 that all the data we've already stored in local storage has been stored
 correctly, but mere mortals are unlikely to get the code right first time. Or
 even if you're just playing about with the code it will be handy. So we should
-add a button to the side-menu (in `index.html`):
+add a button to the side menu (in `index.html`):
 
 ```javascript
 <ons-list>
