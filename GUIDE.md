@@ -644,25 +644,22 @@ The back button component is `ons-back-button`. When `ons-back-button` is
 tapped, it looks for a parent `ons-navigator`. Then it pops the top page off
 the navigator's page stack, taking the user back to the previous page.
 
-Let's add it to the About page toolbar:
+Add this to the `ons-toolbar` in `about.html`:
 
 ```html
-<ons-page id="about">
-
-  <ons-toolbar>
-    <div class="left">
-      <ons-back-button></ons-back-button>
-    </div>
-
-    <div class="center">About</div>
-  </ons-toolbar>
-
-  <p>The mighty About page.</p>
-
-</ons-page>
+<div class="left">
+  <ons-back-button></ons-back-button>
+</div>
 ```
 
 No further work is needed; `ons-back-button` works straight out the box.
+
+##### Next steps
+
+Try extending the app to display different text on the home page before and
+after the About page back button has been tapped. Hint: you should set
+`ons-back-button`'s `options.callback` function. See the API page for more
+details.
 
 ## Tabs
 
@@ -710,12 +707,14 @@ Later we'll also add functionality to save Pokemon, so create a file
 
 OK, now back to `home.html` for the tabbar. Remove the `"Hello!"` message and
 replace it with `ons-tabbar`. (Don't miss the toolbar title changing from "Home"
-to "Pokemon"):
+to "Pokemon"). `home.html` should now be:
 
 ```html
 <ons-page id="home">
   <script>
-    ...
+    const openMenu = () => {
+      document.querySelector('#menu').open();
+    };
   </script>
 
   <ons-toolbar id="home-toolbar">
@@ -749,6 +748,13 @@ attribute specifies which page should be loaded when the tab is tapped (this is
 the same as the `page` attribute of `ons-navigator`). The `label` attribute
 specifies what text is on the tab itself. There are more `ons-tab` attributes;
 see the docs.
+
+##### Next steps
+
+The tabs we just made are labelled with text, but they can also be icons.
+
+Try setting the `icon` attribute of `ons-tab` and see the effect. The usage is
+the same as `ons-icon`'s `icon` attribute.
 
 ## Theme Roller
 
