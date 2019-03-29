@@ -1373,6 +1373,12 @@ list. Scroll to the bottom and repeat until we run out of results.
 
 ### Caching in local storage
 
+> The code in this section will be explained piece by piece, without showing you
+> where to add it in the existing code. However, the full code is shown at the
+> end of the section so you can easily copy it into your `pokemon.html` file. If
+> you just want to speed through this section, skip to end for the full code
+> listing.
+
 As the outstandingly moral people that we are, we should really cache the
 results of the API calls so we don't put unnecessary strain on PokeAPI. At the
 moment, when the app is closed, the whole Pokemon list is lost and we have to
@@ -1383,12 +1389,6 @@ a few strings here and there. It will work for our purposes (probably) but for
 anything serious, you should look into a proper caching solution. I'd love to
 recommend one to you but I don't know any. I bet you thought I knew what I was
 talking about. Well, I've got bad news for you, budderoo.
-
-> The code in this section will be explained piece by piece, without showing you
-> where to add it in the existing code. However, the full code is shown at the
-> end of the section so you can easily copy it into your `pokemon.html` file. If
-> you just want to speed through this section, skip to end for the full code
-> listing.
 
 First off we'll define a couple of constants that will help us store the Pokemon
 in the right place. These will be used to create the keys in local storage:
@@ -1483,85 +1483,98 @@ const clearLocalStorage = () => {
 ```
 
 As promised, here is the full JavaScript listing for `pokemon.html`. The
-contents of the `<script>` tag in `pokemon.html` should exactly match this, so
+contents of `pokemon.html` should exactly match this, so
 copy and paste it in now:
 
-```javascript
-const savePokemon = (pokenumber, button) => {
-  addPokemonToGrid(pokenumber);
-  button.parentNode.parentNode.hideExpansion();
-};
+```html
+<ons-page id="pokemon">
 
-const appendPokemon = (pokenumber, name) => {
-  const list = document.querySelector('#pokemon-list');
-  list.appendChild(ons.createElement(`
-    <ons-list-item expandable>
-      ${pokenumber} ${name}
-      <div class="expandable-content">
-        <ons-button onclick="savePokemon(${pokenumber}, this)">Save</ons-button>
-      </div>
-    </ons-list-item>
-  `));
-}
+  <script>
+    const savePokemon = (pokenumber, button) => {
+      addPokemonToGrid(pokenumber);
+      button.parentNode.parentNode.hideExpansion();
+    };
 
-document.addEventListener('init', ({ target }) => {
-  if (target.matches('#pokemon')) {
-    // local storage keys
-    const URL = 'pokemon__url';
-    const PREFIX = 'pokemon__';
-
-    let nextPokenumber = 1;
-    let storedPokemon;
-
-    while ((storedPokemon = localStorage.getItem(PREFIX + nextPokenumber)) !== null) {
-      console.log(`got ${storedPokemon} from local with key ${PREFIX + nextPokenumber}`);
-      appendPokemon(nextPokenumber, storedPokemon);
-      nextPokenumber++;
-    }
-
-    if (!localStorage.getItem(URL)) {
-      localStorage.setItem(URL, 'https://pokeapi.co/api/v2/pokemon');
-    }
-
-    const get = async () => {
-      // do the API call and get JSON response
-      const response = await fetch(localStorage.getItem(URL));
-      const json = await response.json();
-
-      const newPokemon = json.results.map(e => e.name);
-
+    const appendPokemon = (pokenumber, name) => {
       const list = document.querySelector('#pokemon-list');
-      newPokemon.forEach((name, i) => {
-        appendPokemon(nextPokenumber, name);
+      list.appendChild(ons.createElement(`
+        <ons-list-item expandable>
+          ${pokenumber} ${name}
+          <div class="expandable-content">
+            <ons-button onclick="savePokemon(${pokenumber}, this)">Save</ons-button>
+          </div>
+        </ons-list-item>
+      `));
+    }
 
-        const key = PREFIX + nextPokenumber;
-        console.log(`Storing ${name} as ${key}`);
-        localStorage.setItem(key, name)
-        nextPokenumber++;
-      });
+    document.addEventListener('init', ({ target }) => {
+      if (target.matches('#pokemon')) {
+        // local storage keys
+        const URL = 'pokemon__url';
+        const PREFIX = 'pokemon__';
 
-      localStorage.setItem(URL, json.next);
+        let nextPokenumber = 1;
+        let storedPokemon;
 
-      // hide the spinner when all the pages have been loaded
-      if (!localStorage.getItem(URL)) {
-        document.querySelector('#after-list').style.display = 'none';
+        while ((storedPokemon = localStorage.getItem(PREFIX + nextPokenumber)) !== null) {
+          console.log(`got ${storedPokemon} from local with key ${PREFIX + nextPokenumber}`);
+          appendPokemon(nextPokenumber, storedPokemon);
+          nextPokenumber++;
+        }
+
+        if (!localStorage.getItem(URL)) {
+          localStorage.setItem(URL, 'https://pokeapi.co/api/v2/pokemon');
+        }
+
+        const get = async () => {
+          // do the API call and get JSON response
+          const response = await fetch(localStorage.getItem(URL));
+          const json = await response.json();
+
+          const newPokemon = json.results.map(e => e.name);
+
+          const list = document.querySelector('#pokemon-list');
+          newPokemon.forEach((name, i) => {
+            appendPokemon(nextPokenumber, name);
+
+            const key = PREFIX + nextPokenumber;
+            console.log(`Storing ${name} as ${key}`);
+            localStorage.setItem(key, name)
+            nextPokenumber++;
+          });
+
+          localStorage.setItem(URL, json.next);
+
+          // hide the spinner when all the pages have been loaded
+          if (!localStorage.getItem(URL)) {
+            document.querySelector('#after-list').style.display = 'none';
+          }
+        };
+
+        // get the first set of results as soon as the page is initialised
+        get();
+
+        // at the bottom of the list get the next set of results and append them
+        target.onInfiniteScroll = (done) => {
+          if (localStorage.getItem(URL)) {
+            setTimeout(() => {
+              get();
+              done();
+            }, 200);
+          }
+        };
       }
-    };
+    });
+  </script>
 
-    // get the first set of results as soon as the page is initialised
-    get();
+  <ons-list id="pokemon-list">
+  </ons-list>
 
-    // at the bottom of the list get the next set of results and append them
-    target.onInfiniteScroll = (done) => {
-      if (localStorage.getItem(URL)) {
-        setTimeout(() => {
-          get();
-          done();
-        }, 200);
-      }
-    };
-  }
-});
+  <div id="after-list" style="margin: 20px; text-align: center;">
+    <ons-icon icon="fa-spinner" size="26px" spin></ons-icon>
+  </div>
+
+</ons-page>
 ```
 
 Run the app now (maybe clear local storage first with the side menu button, and
@@ -1582,38 +1595,52 @@ storage, not from PokeAPI.
 > > - And don't forget the button to clear local storage as an aside
 -->
 
+
+<!--
+
 ### Lazy list
 
-`ons-list-item` worked well when we only had a few items in the list, but if you
-try scrolling about once all 900 or so Pokemon have been loaded, you might
-notice things starting to slow up a bit. When a new `ons-list-item` gets added
-to the DOM, it stays there forever (unless we manually destroy it). That means
-the app has to cope with over 900 list items when the list is fully loaded. But
-the user only sees a small fraction of those list items at once, so the rest
-don't really need to be in the DOM.
+> Again, this section will explain the important snippets of code without
+> showing where exactly to add them to `pokemon.html`. The full listing is at
+> the end of the section, so skip to the end if you just want the final code.
 
-Enter <del>the dragon</del> `ons-lazy-repeat`. `ons-lazy-repeat` can be used to
-display very large and even infinite lists without a drop in performance. It is
-a child element of `ons-list`. Let's add one to the Pokemon list now:
+`ons-list-item` worked well when we only had a few items in the list, but if you
+try scrolling about once several hundred Pokemon have been loaded, you might
+notice things starting to slow up a bit.
+
+When a new `ons-list-item` gets added to the DOM, it stays there forever (unless
+we manually destroy it). That means the app has to cope with hundreds of list
+items when the list is fully loaded. But the user only sees a small fraction of
+those list items at once, so the rest don't really need to be in the DOM.
+
+Enter `ons-lazy-repeat`. `ons-lazy-repeat` can be used to display very large and
+even infinite lists without a drop in performance. It is a child element of
+`ons-list`. Let's add this as the child of the `ons-list` in `pokemon.html`:
 
 ```html
-<ons-list id="pokemon-list">
-  <ons-lazy-repeat id="lazy"></ons-lazy-repeat>
-</ons-list>
+<ons-lazy-repeat id="lazy"></ons-lazy-repeat>
 ```
 
-That's straightforward. Now we need a bit of JavaScript to bend the lazy repeat
+Straightforward. Now we need a bit of JavaScript to bend the lazy repeat
 to our will.
 
 `ons-lazy-repeat` has a property called `delegate`, which is an object
 containing functions that it uses to render list items. We need to write two of
-those functions: `createItemContent`, which receives an index number of the item
-to be created and should return an Element; and `countItems`, which returns the
-total number of items in the list.
+those functions:
 
+  - `createItemContent`, which receives an index number of the item to be
+    created and should return an Element.
+  - `countItems`, which returns the total number of items in the list.
+
+-->
+
+<!--
 > At this point you might reasonably ask what the hell `countItems` is supposed
 > to return for an infinite list. Good question; answer to be discovered. (And
 > the answer appears not to be "NaN" or "Infinity".)
+-->
+
+<!--
 
 ```javascript
 document.querySelector('#lazy').delegate = {
@@ -1637,7 +1664,7 @@ document.querySelector('#lazy').delegate = {
 ```
 
 Ah, hold on, `createItemContent` only receives an index number. We better save
-those Pokecritters in an array so we know what to load. When we get a new
+the Pokemon names in an array so we know what to load. When we get a new
 Pokemon, we need to save it in _both_ local storage and an array of items. Then
 when the app loads, instead of reading local storage and appending everything to
 the DOM, we need to put Pokemon in local storage in the items array and then
@@ -1649,21 +1676,23 @@ adding the contents of the items array to the DOM.
 > points when we need to call refresh: when the items are initially loaded from
 > local storage, and every time new items are received from an API call.
 
-First off, let's create a tasty array. Yim yum.
+First off, let's create an array for the Pokemon names.
 
 ```javascript
 let items = [];
 ```
 
-Change the looping bit from local storage like this:
+The looping bit to get the cached Pokemon when the page initialises now adds the
+cached Pokemon name to the `items` array, instead of manually appending the
+Pokemon using `ons-list-item`:
 
 ```javascript
-let pokemonCount = 0;
+// load the Pokemon already cached
 let storedPokemon;
-while ((storedPokemon = localStorage.getItem(PREFIX + pokemonCount)) !== null) {
-  //console.log(`got ${storedPokemon} from local with key ${PREFIX + pokemonCount}`);
+while ((storedPokemon = localStorage.getItem(PREFIX + nextPokenumber)) !== null) {
+  console.log(`got ${storedPokemon} from local with key ${PREFIX + nextPokenumber}`);
   items[pokemonCount] = storedPokemon;
-  pokemonCount++;
+  nextPokenumber++;
 }
 ```
 
@@ -1696,6 +1725,8 @@ const get = async () => {
 ```
 
 Run the app. Smooth as a baby's bottom, <del>and just as entertaining</del>.
+
+-->
 
 <!--
 > > - It's going to get horribly slow if we load those 900-odd Pokemon all into the
