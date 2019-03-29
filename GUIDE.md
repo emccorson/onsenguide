@@ -23,9 +23,9 @@ will cover solutions to common tasks in app development, including:
   - Showing a swipeable gallery of images
   - Caching data
 
-The app you'll be creating displays a list of Pokemon fetched from a remote API.
-The user can save Pokemon from the list and view them in a grid display. Tapping
-a Pokemon in a grid will open a gallery of images. The user can swipe left and
+The app you'll be creating displays a list of Pokémon fetched from a remote API.
+The user can save Pokémon from the list and view them in a grid display. Tapping
+a Pokémon in a grid will open a gallery of images. The user can swipe left and
 right to move through the gallery.
 
 #### Following this tutorial
@@ -748,7 +748,7 @@ Most apps will make use of both `ons-navigator` and `ons-tabbar`. As a rule of
 thumb, the most commonly used pages should be tabs, and the less frequently
 visited pages (such as the About page) should not be.
 
-We're next going to create a page that displays a list of Pokemon. Create a new
+We're next going to create a page that displays a list of Pokémon. Create a new
 file `pokemon.html` and paste the following:
 
 ```html
@@ -768,7 +768,7 @@ file `pokemon.html` and paste the following:
 </ons-page>
 ```
 
-Later we'll also add functionality to save Pokemon, so create a file
+Later we'll also add functionality to save Pokémon, so create a file
 `saved.html` for that now too:
 
 ```html
@@ -777,14 +777,14 @@ Later we'll also add functionality to save Pokemon, so create a file
   <script>
   </script>
 
-  <p>Saved Pokemon go here.</p>
+  <p>Saved Pokémon go here.</p>
 
 </ons-page>
 ```
 
 OK, now back to `home.html` for the tabbar. Remove the `"Hello!"` message and
 replace it with `ons-tabbar`. (Don't miss the toolbar title changing from "Home"
-to "Pokemon"). `home.html` should now be:
+to "Pokémon"). `home.html` should now be:
 
 ```html
 <ons-page id="home">
@@ -795,7 +795,7 @@ to "Pokemon"). `home.html` should now be:
   </script>
 
   <ons-toolbar id="home-toolbar">
-    <div class="center">Pokemon</div>
+    <div class="center">Pokémon</div>
 
     <div class="left">
       <ons-toolbar-button onclick="openMenu()">
@@ -805,14 +805,14 @@ to "Pokemon"). `home.html` should now be:
   </ons-toolbar>
 
   <ons-tabbar id="tabbar">
-    <ons-tab page="pokemon.html" label="Pokemon"></ons-tab>
+    <ons-tab page="pokemon.html" label="Pokémon"></ons-tab>
     <ons-tab page="saved.html" label="Saved"></ons-tab>
   </ons-tabbar>
 </ons-page>
 ```
 
 Run the app. On the home page, there is a tabbar with two tabs labelled
-"Pokemon" and "Saved". Tap the tabs to switch the page content (i.e. the middle
+"Pokémon" and "Saved". Tap the tabs to switch the page content (i.e. the middle
 of the screen between the toolbar and the tabbar) between the two pages
 `pokemon.html` and `saved.html`.
 
@@ -844,7 +844,7 @@ know.
 
 <!--
 > > - Figure out how to use the theme roller
-> > - Make a red theme to match our Pokemon app
+> > - Make a red theme to match our Pokémon app
 > > - Download the theme and add it to the app styles
 > > - At this point playground scrubs really should give up
 -->
@@ -888,7 +888,7 @@ you are sure what should be a tab and what should be a regular page.
 #### Events
 
 You may have noticed something isn't quite right when you go to the "Saved" tab:
-The toolbar title still says "Pokemon" when it should say "Saved". To fix this,
+The toolbar title still says "Pokémon" when it should say "Saved". To fix this,
 we need a bit of JavaScript to dynamically change the toolbar title when the tab
 changes.
 
@@ -946,11 +946,11 @@ API documentation.
 
 #### Expandable list items
 
-We breezed over the Pokemon list page earlier so we could get on to the tabbar,
+We breezed over the Pokémon list page earlier so we could get on to the tabbar,
 but let's go back to it now.
 
-So far there's a list of Pokemon, created using `ons-list` and `ons-list-item`.
-We would like to be able to select a Pokemon from this list and save it. This is
+So far there's a list of Pokémon, created using `ons-list` and `ons-list-item`.
+We would like to be able to select a Pokémon from this list and save it. This is
 a job for __expandable list items__.
 
 An expandable list item is one that increases in size when it is tapped,
@@ -1042,16 +1042,16 @@ such as adding a top part to an expandable list item.
 
 #### Carousels
 
-##### Saving Pokemon
+##### Saving Pokémon
 
 What should happen when a user presses the Save button? Well, that's where the
 Saved page we created earlier comes in.
 
-When a Pokemon is saved, it should be added to the Saved page. The Saved page
-will show the pictures of the saved Pokemon in a grid layout. When one of the
+When a Pokémon is saved, it should be added to the Saved page. The Saved page
+will show the pictures of the saved Pokémon in a grid layout. When one of the
 pictures is tapped, the picture will fill the whole screen in a "gallery" style.
 The user can then swipe left or right to go to the previous or next saved
-Pokemon.
+Pokémon.
 
 Let's define the `savePokemon` function in the `<script>` tag of `pokemon.html`:
 
@@ -1063,13 +1063,13 @@ const savePokemon = (pokenumber, button) => {
 ```
 
 `savePokemon` is called when a save button is pressed. It receives the number of
-the Pokemon we want to save (if you're not familiar with Pokemon, each Pokemon
+the Pokémon we want to save (if you're not familiar with Pokémon, each Pokémon
 has a unique number), and a reference to the particular save button that was
 pressed. `savePokemon` simply calls `addPokemonToGrid` (not yet defined) then
 closes the expandable list item.
 
 Now we need to define `addPokemonToGrid` in `saved.html`. For now let's just
-store the Pokemon number in an array. Put this in the `<script>` tag of
+store the Pokémon number in an array. Put this in the `<script>` tag of
 `saved.html`:
 
 ```javascript
@@ -1081,15 +1081,15 @@ const addPokemonToGrid = pokenumber => {
 };
 ```
 
-Run the app again, tap on a Pokemon in the list, and tap the Save button that
-appears. The list item will contract, and the Pokemon will be saved, although
+Run the app again, tap on a Pokémon in the list, and tap the Save button that
+appears. The list item will contract, and the Pokémon will be saved, although
 we can't see that reflected in the app just yet.
 
 ##### Grid
 
 ##### Static assets (or whatever it's called)
 
-We need some images of Pokemon for the app, so we'll get some of the sprites
+We need some images of Pokémon for the app, so we'll get some of the sprites
 from an online repository.  Getting all the sprites over the internet every time
 we want to see them is a bad idea. Some people will be using the app over a
 mobile connection and we don't want to suck up all their data. So we download
@@ -1098,7 +1098,7 @@ all the sprites once and save them as static assets in our project.
 Download and unzip https://github.com/PokeAPI/sprites/archive/master.zip.
 
 Then make a directory `./www/img` and stick the all the sprites in there.
-They're named by Pokemon number - very helpful for us.
+They're named by Pokémon number - very helpful for us.
 
 <!--
 - Get the static images
@@ -1110,7 +1110,7 @@ They're named by Pokemon number - very helpful for us.
 
 ##### Making the grid
 
-We have the sprites, we have the code to save Pokemon, we have the やる気; let's
+We have the sprites, we have the code to save Pokémon, we have the やる気; let's
 grid this mother!
 
 Actually, there is no need for special Onsen UI components here, so we'll just
@@ -1159,7 +1159,7 @@ use some regular HTML and CSS. Replace the contents of `saved.html` with:
 </ons-page>
 ```
 
-With a bit of luck, you can now save a Pokemon from the list and have its
+With a bit of luck, you can now save a Pokémon from the list and have its
 picture show up in the grid. Tapping the image takes you to the gallery view.
 Nothing useful in the gallery yet, but our time is gonna come.
 
@@ -1220,7 +1220,7 @@ docs for the full list.
 Now for the JavaScript to make this work. Two things need to happen when the
 carousel is shown:
 
-  1. The carousel needs to update its items with whatever new Pokemon have been
+  1. The carousel needs to update its items with whatever new Pokémon have been
      saved to the grid since the last time the carousel was shown.
   2. The carousel needs to move to the correct item for the grid item that was
      tapped to show the carousel. For example, if the user taps Charizard in the
@@ -1267,15 +1267,15 @@ function will be run every time the gallery page is shown.
 The grid page will pass in some data that we need to the navigator when the
 gallery page is pushed. This is accessed from `ons-navigator.topPage.data`.
 `data` is an object containing whatever was passed in from the previous page. In
-this case, the pushed data consists of the number of the Pokemon that was tapped
-in the grid, and the list of Pokemon that have been saved.
+this case, the pushed data consists of the number of the Pokémon that was tapped
+in the grid, and the list of Pokémon that have been saved.
 
-The slice code figures out the difference between the Pokemon already in the
-carousel and the list of saved Pokemon we received from the grid page, and from
-that we know what Pokemon are not yet in the carousel. We add them.
+The slice code figures out the difference between the Pokémon already in the
+carousel and the list of saved Pokémon we received from the grid page, and from
+that we know what Pokémon are not yet in the carousel. We add them.
 
 Then all that remains is to move the carousel to the image of the tapped
-Pokemon. `ons-carousel`'s `setActiveIndex` function is what we need here.
+Pokémon. `ons-carousel`'s `setActiveIndex` function is what we need here.
 
 Right, enough talk, more execution (said Yurovsky to the Tsar). Swip-swipe away
 to your heart's content.
@@ -1287,21 +1287,21 @@ to your heart's content.
 
 #### Remote API calls
 
-Let's go back to the list of Pokemon at `pokemon.html`. At the moment, there are
-a few Pokemon hardcoded into the list, but it would be better if our list had
-_all_ Pokemon in it. All 800 or so.
+Let's go back to the list of Pokémon at `pokemon.html`. At the moment, there are
+a few Pokémon hardcoded into the list, but it would be better if our list had
+_all_ Pokémon in it. All 800 or so.
 
 Luckily, there's PokeAPI to help us out. PokeAPI is a REST API that provides
-information about everything to do with Pokemon. We're going to call one of its
-methods to get the full list of Pokemon.
+information about everything to do with Pokémon. We're going to call one of its
+methods to get the full list of Pokémon.
 
 The results returned from PokeAPI are paged. This means we get the first few
 results (the first 20 in this case) and URL to request the next page of results
 if we want them. That way we only get the results we need as we need them, and
 also don't overload the PokeAPI servers.
 
-Since we're getting the Pokemon from the server, we don't need the hardcoded
-Pokemon currently in the list, so clear the decks. Remove the child elements of
+Since we're getting the Pokémon from the server, we don't need the hardcoded
+Pokémon currently in the list, so clear the decks. Remove the child elements of
 the `ons-list` in `pokemon.html` so that the list looks like this:
 
 ```html
@@ -1340,7 +1340,7 @@ const get = async () => {
 ```
 
 Briefly, the `get` function calls the PokeAPI to get a page of results. The
-response contains the next lot of Pokemon, which we append to the list. It also
+response contains the next lot of Pokémon, which we append to the list. It also
 contains the URL to get the next page of results, which we save to `url`. The
 next time `get` is called, it will use the URL we just got.
 
@@ -1349,9 +1349,9 @@ handy way to make elements dynamically if you want to add them to the DOM using
 JavaScript. It takes a string representation of the element you want to create
 and interprets it. See the docs for more information.
 
-##### Loading the Pokemon as we need them
+##### Loading the Pokémon as we need them
 
-We could keep calling `get` until we have all the Pokemon and add them to the
+We could keep calling `get` until we have all the Pokémon and add them to the
 list all at once, but that is wasteful because the user may never scroll all the
 way through the list. Instead we should only call `get` when the user has seen
 as much of the list as is currently loaded. Let's wrap some of the code in an
@@ -1368,7 +1368,7 @@ document.addEventListener('init', ({ target }) => {
   if (target.matches('#pokemon')) {
 
     let url = 'https://pokeapi.co/api/v2/pokemon';
-    let nextPokenumber = 1; // use to keep track of the Pokemon numbers
+    let nextPokenumber = 1; // use to keep track of the Pokémon numbers
 
     const get = async () => {
       // do the API call and get JSON response
@@ -1415,8 +1415,8 @@ document.addEventListener('init', ({ target }) => {
 ```
 
 Here we add a listener for the `init` event that is fired when a page is
-initialised. If the page initialised was the Pokemon list page, we call `get` to
-get the first 20 Pokemon and add them to the list. Then we set the page's
+initialised. If the page initialised was the Pokémon list page, we call `get` to
+get the first 20 Pokémon and add them to the list. Then we set the page's
 `infiniteScroll` property. The callback function of `infiniteScroll` is called
 when we reach the end of the page's content (defined by `div.content` which
 we'll add in a minute). We need to use `setTimeout` because otherwise the
@@ -1437,7 +1437,7 @@ of `pokemon.html` after the `ons-list` definition:
 </div>
 ```
 
-Run the app and have a look at the list again. First we see that some Pokemon
+Run the app and have a look at the list again. First we see that some Pokémon
 have been loaded in the list from the start. Scroll to the bottom of the list
 and you should briefly see the spinner to indicate that the next results are
 loading. Then the API call will finish and the next results will be added to the
@@ -1460,16 +1460,16 @@ list. Scroll to the bottom and repeat until we run out of results.
 
 As the outstandingly moral people that we are, we should really cache the
 results of the API calls so we don't put unnecessary strain on PokeAPI. At the
-moment, when the app is closed, the whole Pokemon list is lost and we have to
+moment, when the app is closed, the whole Pokémon list is lost and we have to
 get all the data all over again next time we open the app.
 
-We can use local storage to store the Pokemon. Local storage is good for storing
+We can use local storage to store the Pokémon. Local storage is good for storing
 a few strings here and there. It will work for our purposes (probably) but for
 anything serious, you should look into a proper caching solution. I'd love to
 recommend one to you but I don't know any. I bet you thought I knew what I was
 talking about. Well, I've got bad news for you, budderoo.
 
-First off we'll define a couple of constants that will help us store the Pokemon
+First off we'll define a couple of constants that will help us store the Pokémon
 in the right place. These will be used to create the keys in local storage:
 
 ```javascript
@@ -1479,13 +1479,13 @@ const PREFIX = 'pokemon__';
 ```
 
 Instead of saving the next URL in the `url` variable, we'll now store it in
-local storage with the key `pokemon__url`. The name of each Pokemon will also be
+local storage with the key `pokemon__url`. The name of each Pokémon will also be
 stored in local storage, with its key being `pokemon__` and then its number. For
 example, Bulbasaur is number 1, so will be saved as `pokemon__1` in local
 storage.
 
-When the Pokemon list page is initialised, we should load all the Pokemon we
-already have cached. We can do this by looping through all the Pokemon numbers
+When the Pokémon list page is initialised, we should load all the Pokémon we
+already have cached. We can do this by looping through all the Pokémon numbers
 starting from 1, until we don't get a result from the cache:
 
 ```javascript
@@ -1660,8 +1660,8 @@ Run the app now (maybe clear local storage first with the side menu button, and
 also clear the app log if you're using Monaca Debugger). You'll see that there
 are no results in local storage so the API will be called. You can verify this
 by checking the app log or console, and seeing the messages saying that "X
-Pokemon has been stored" etc. Then restart the app, and this time see from the
-log (and faster loading times) that cached Pokemon are loaded from local
+Pokémon has been stored" etc. Then restart the app, and this time see from the
+log (and faster loading times) that cached Pokémon are loaded from local
 storage, not from PokeAPI.
 
 <!--
@@ -1684,7 +1684,7 @@ storage, not from PokeAPI.
 > the end of the section, so skip to the end if you just want the final code.
 
 `ons-list-item` worked well when we only had a few items in the list, but if you
-try scrolling about once several hundred Pokemon have been loaded, you might
+try scrolling about once several hundred Pokémon have been loaded, you might
 notice things starting to slow up a bit.
 
 When a new `ons-list-item` gets added to the DOM, it stays there forever (unless
@@ -1743,10 +1743,10 @@ document.querySelector('#lazy').delegate = {
 ```
 
 Ah, hold on, `createItemContent` only receives an index number. We better save
-the Pokemon names in an array so we know what to load. When we get a new
-Pokemon, we need to save it in _both_ local storage and an array of items. Then
+the Pokémon names in an array so we know what to load. When we get a new
+Pokémon, we need to save it in _both_ local storage and an array of items. Then
 when the app loads, instead of reading local storage and appending everything to
-the DOM, we need to put Pokemon in local storage in the items array and then
+the DOM, we need to put Pokémon in local storage in the items array and then
 call `ons-lazy-repeat`'s `refresh` method. Then `ons-lazy-repeat` will handle
 adding the contents of the items array to the DOM.
 
@@ -1755,18 +1755,18 @@ adding the contents of the items array to the DOM.
 > points when we need to call refresh: when the items are initially loaded from
 > local storage, and every time new items are received from an API call.
 
-First off, let's create an array for the Pokemon names.
+First off, let's create an array for the Pokémon names.
 
 ```javascript
 let items = [];
 ```
 
-The looping bit to get the cached Pokemon when the page initialises now adds the
-cached Pokemon name to the `items` array, instead of manually appending the
-Pokemon using `ons-list-item`:
+The looping bit to get the cached Pokémon when the page initialises now adds the
+cached Pokémon name to the `items` array, instead of manually appending the
+Pokémon using `ons-list-item`:
 
 ```javascript
-// load the Pokemon already cached
+// load the Pokémon already cached
 let storedPokemon;
 while ((storedPokemon = localStorage.getItem(PREFIX + nextPokenumber)) !== null) {
   console.log(`got ${storedPokemon} from local with key ${PREFIX + nextPokenumber}`);
@@ -1808,7 +1808,7 @@ Run the app. Smooth as a baby's bottom, <del>and just as entertaining</del>.
 -->
 
 <!--
-> > - It's going to get horribly slow if we load those 900-odd Pokemon all into the
+> > - It's going to get horribly slow if we load those 900-odd Pokémon all into the
 > >   DOM.
 > > - To make it more slip-slidy fun, let's use lazy instead
 > > - It kills the items you can't see so everything is a bit faster
