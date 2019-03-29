@@ -1,8 +1,85 @@
 ---
-"title": "Onsen UI Guide"
+title: 'Tutorial'
+order: 35
+tocGroup: guide
+layout: docs.html.eco
+description: 'Learn about Onsen UI components and common tasks while creating an
+app'
 ---
 
-## Installing and Running
+<%- @markdown => %>
+
+### Tutorial
+
+#### Overview
+
+This tutorial will show you how to build an app from scratch using Onsen UI. We
+will cover solutions to common tasks in app development, including:
+
+  - Navigating tabs and pages
+  - Authenticating user login
+  - Paging data from a remote API
+  - Displaying large lists efficiently
+  - Showing a swipeable gallery of images
+  - Caching data
+
+The app you'll be creating displays a list of Pokemon fetched from a remote API.
+The user can save Pokemon from the list and view them in a grid display. Tapping
+a Pokemon in a grid will open a gallery of images. The user can swipe left and
+right to move through the gallery.
+
+#### Following this tutorial
+
+There are a few ways you can follow along with this tutorial. Choose one of
+these options:
+
+##### 1. Monaca CLI & Debugger (Recommended)
+
+Monaca CLI is a command line tool for developing mobile and web apps. It
+can be used with Monaca Debugger, which is a mobile app that allows you to
+easily run your project on a mobile device from your local computer. Using
+these tools requires you to sign up for a free Monaca account.
+
+Install node and npm, then run `npm install -g monaca` to install Monaca
+CLI. Run `monaca login`, then create a new project with:
+
+     monaca create tutorial --template onsenui-v2-js-minimum
+
+To debug the project, install Monaca Debugger from the app store, then on
+Monaca CLI, run:
+
+     monaca debug
+
+You can also preview your project in a web browser with `monaca preview`.
+
+For more information about Monaca CLI, see [the official
+website](https://monaca.io/cli.html).
+
+> Monaca CLI is usually used for making Cordova projects. However, for the
+> purposes of this tutorial Cordova doesn't matter, so you can safely ignore it.
+> Just know for now that your project will contain some Cordova configuration
+> files but that we won't be touching them.
+
+
+##### 2. Onsen UI Playground
+
+Onsen UI Playground is a web app that lets you run snippets of Onsen UI code
+without having to install anything. It's great for testing out small ideas. Once
+we start using multiple files though, you'll want to switch to a local setup
+instead.
+
+Try out Onsen UI Playground [here](https://onsen.io/playground/).
+
+
+##### 3. CDN
+
+Unpkg provides CDN support for Onsen UI’s CSS and JavaScript. Just use these CDN links:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+```
 
 <!--
 > > - Is the original not OK here?
@@ -40,7 +117,7 @@
 > >     - If you want to use AngularJS, see the tutorial that will never be written
 -->
 
-## Login page
+#### Creating a page
 
 Let's create the first screen. Each screen in Onsen UI is called a "page". The
 Onsen UI page component is called `ons-page`. Delete the contents of the
@@ -66,7 +143,7 @@ Typically, everything that you want to display in a page should go within
 `ons-page` tags. This way Onsen UI will automatically position your elements
 correctly.
 
-### Creating a login screen
+##### Creating a login screen
 
 The first thing you want to show a user when they open your app is probably a
 login screen. We can create one very easily using Onsen UI's form components.
@@ -168,7 +245,7 @@ page in the documentation.
 -->
 
 
-### Adding JavaScript
+#### Adding JavaScript
 
 We have a pretty login form now, but when we click the button, nothing happens.
 To fix that let's add a bit of JavaScript.
@@ -206,7 +283,7 @@ can see the only username and password combination that will be accepted is
 > anyone can see what they are by looking at the page source. For the purposes
 > of this tutorial though, it's fine.
 
-### Notifications
+#### Notifications
 
 In plain JavaScript we would use `alert` to show an alert, but Onsen UI has its
 own notifications. There are several different notifications available, but the
@@ -225,12 +302,12 @@ See more about the available notifications in the API pages.
 > >     looks better. Make the click show an Onsen alert.
 -->
 
-## Navigator and logging in for real(-ish)
+#### Navigating pages
 
 All well and good. But we'd like to move to a new page once the user
 successfully logs in, so let's create a new page.
 
-### Templates
+#### Templates
 
 Add the following to `index.html`, _outside_ the `ons-page` tag but still
 _inside_ the body:
@@ -246,7 +323,7 @@ _inside_ the body:
 This is a template for a new page. Templates aren't loaded automatically when
 the app starts and will only be created when the page is shown.
 
-### Navigator
+##### Navigator
 
 To move between pages, use the `ons-navigator` component. `ons-navigator`
 provides methods for pushing and popping pages to and from the **page stack**.
@@ -320,7 +397,7 @@ The home page will be shown.
 > and password every time we want to run the app. While you're developing, set
 > the correct username and password to empty strings to save time.
 
-#### resetToPage
+##### resetToPage
 
 Let's examine the code we just added. We get a reference to the navigator and
 then call its `resetToPage` method with the argument `'home.html'`.
@@ -335,7 +412,7 @@ an ID with the suffix `.html`. We'll see why later.
 `resetToPage` is just one of the handy methods `ons-navigator` provides. To see
 the others, look at the API docs.
 
-### Multiple files
+#### Multiple files
 
 `index.html` is starting to get a little big now and will soon become hard to
 maintain. To that end, we can move the home page template to its own file.
@@ -377,7 +454,7 @@ page out of a template and into its own file.
 > >     password in your HTML in real life
 -->
 
-## Toolbar
+#### Toolbars
 
 The home page could use a little more styling. Let's add a toolbar to make it
 look better. For this we need the `ons-toolbar` component. Add it to
@@ -407,7 +484,7 @@ Try adding `div.left` and `div.right` to the toolbar (in the same way as
 `div.center` has already been added). Notice how using the `left` and `right`
 classes automatically positions each `div` in the correct place.
 
-## Splitter menu to About page
+#### Side menus
 
 Now let's see how to add a collapsable side menu. We're going to add links to
 other pages in the side menu, so let's create a new page. Create a new file
@@ -442,7 +519,7 @@ Firstly, `ons-toolbar-button`: This component is basically the same as
 `ons-button` except that it is specifically for buttons inside a toolbar. It
 adds some extra styling to make the button fit the look of the toolbar.
 
-### Icons
+#### Icons
 
 Secondly, `ons-icon`: Whenever you want to display an icon, use this component.
 The specific icon is defined in the `icon` attribute.
@@ -481,7 +558,7 @@ Or how about `icon="fa-spinner"`? With this one you should also try setting the
 For more examples of `ons-icon` usage and to see the full list of available
 icons, see the API page.
 
-### Splitter
+##### Splitter
 
 Side menus are created in Onsen UI by using the `ons-splitter-` components.
 There is a parent component `ons-splitter`. It has two children:
@@ -578,7 +655,7 @@ Add this in `home.html`:
 Run the app, hit the login button, add the tap the menu icon at the top left of
 the home page. The side menu appears!
 
-### Lists
+#### Lists
 
 But there's nothing in it, so let's remedy that now. We are going to put a list
 of links in the side menu, and for that we need `ons-list` and `ons-list-item`.
@@ -627,7 +704,7 @@ the link and the About page will be loaded, then the side menu will close.
 > over `pushPage` to avoid the error of accidentally loading the same page
 > twice, which can cause conflicts and tricky bugs.
 
-## Back button
+#### Back buttons
 
 Let's stop and see how far we've got:
 
@@ -661,7 +738,7 @@ after the About page back button has been tapped. Hint: you should set
 `ons-back-button`'s `options.callback` function. See the API page for more
 details.
 
-## Tabs
+#### Tabs
 
 Along with `ons-navigator`, Onsen UI provides another component for handling
 screen navigation. This is the `ons-tabbar` component. The tabbar keeps track of
@@ -756,7 +833,9 @@ The tabs we just made are labelled with text, but they can also be icons.
 Try setting the `icon` attribute of `ons-tab` and see the effect. The usage is
 the same as `ons-icon`'s `icon` attribute.
 
-## Theme Roller
+#### Styling
+
+##### Theme Roller
 
 Now seems like a good time for a diversion into styling Onsen UI apps. There's a
 handy tool for this called Onsen UI [Theme
@@ -770,7 +849,7 @@ know.
 > > - At this point playground scrubs really should give up
 -->
 
-### Structure of the app
+#### App structure
 
 We have now built an app with a fairly complicated structure. Time for a quick
 review:
@@ -806,7 +885,7 @@ you are sure what should be a tab and what should be a regular page.
 > > - Add a new tab for the pokemon list page
 -->
 
-## Events
+#### Events
 
 You may have noticed something isn't quite right when you go to the "Saved" tab:
 The toolbar title still says "Pokemon" when it should say "Saved". To fix this,
@@ -865,7 +944,7 @@ before a page is popped from the page stack.
 For more information on Onsen UI events and what you can do with them, check the
 API documentation.
 
-## Expandable list items
+#### Expandable list items
 
 We breezed over the Pokemon list page earlier so we could get on to the tabbar,
 but let's go back to it now.
@@ -927,7 +1006,7 @@ Make each of the existing list items expandable by replacing the existing
 Tap a list item now and you'll see it expand to reveal the Save button. Tap it
 again to close.
 
-### Compilation
+#### Compilation process
 
 Take a look at one of the expandable list items in your browser's developer
 tools.
@@ -961,9 +1040,9 @@ such as adding a top part to an expandable list item.
 > > - Add save functionality now or once we have the grid?
 -->
 
-## Grid and carousel
+#### Carousels
 
-### Saving Pokemon
+##### Saving Pokemon
 
 What should happen when a user presses the Save button? Well, that's where the
 Saved page we created earlier comes in.
@@ -1006,9 +1085,9 @@ Run the app again, tap on a Pokemon in the list, and tap the Save button that
 appears. The list item will contract, and the Pokemon will be saved, although
 we can't see that reflected in the app just yet.
 
-### Grid
+##### Grid
 
-#### Static assets (or whatever it's called)
+##### Static assets (or whatever it's called)
 
 We need some images of Pokemon for the app, so we'll get some of the sprites
 from an online repository.  Getting all the sprites over the internet every time
@@ -1029,7 +1108,7 @@ They're named by Pokemon number - very helpful for us.
 - But once they are saved we can reference them as easy as lemons
 -->
 
-#### Making the grid
+##### Making the grid
 
 We have the sprites, we have the code to save Pokemon, we have the やる気; let's
 grid this mother!
@@ -1088,7 +1167,7 @@ Nothing useful in the gallery yet, but our time is gonna come.
 - Nothing special Onsen UI-wise so just chuck the code at 'em and vamoose
 -->
 
-### Rose and Valerie, screaming from the gallery
+##### Rose and Valerie, screaming from the gallery
 
 Onsen UI provides a pretty **nifty** component for creating galleries and other
 swipeable affairs: the carousel component, `ons-carousel`. A carousel displays
@@ -1206,7 +1285,7 @@ to your heart's content.
 - Introduce card if we can be bothered
 -->
 
-## Page data from server
+#### Remote API calls
 
 Let's go back to the list of Pokemon at `pokemon.html`. At the moment, there are
 a few Pokemon hardcoded into the list, but it would be better if our list had
@@ -1270,7 +1349,7 @@ handy way to make elements dynamically if you want to add them to the DOM using
 JavaScript. It takes a string representation of the element you want to create
 and interprets it. See the docs for more information.
 
-### Loading the Pokemon as we need them
+##### Loading the Pokemon as we need them
 
 We could keep calling `get` until we have all the Pokemon and add them to the
 list all at once, but that is wasteful because the user may never scroll all the
@@ -1371,7 +1450,7 @@ list. Scroll to the bottom and repeat until we run out of results.
 > >   consequences. (Or flee town, cowboy.)
 -->
 
-### Caching in local storage
+#### Caching data
 
 > The code in this section will be explained piece by piece, without showing you
 > where to add it in the existing code. However, the full code is shown at the
@@ -1598,7 +1677,7 @@ storage, not from PokeAPI.
 
 <!--
 
-### Lazy list
+#### Lazy list
 
 > Again, this section will explain the important snippets of code without
 > showing where exactly to add them to `pokemon.html`. The full listing is at
@@ -1742,3 +1821,5 @@ Run the app. Smooth as a baby's bottom, <del>and just as entertaining</del>.
 
 
 And we're done.
+
+<% end %>
