@@ -820,7 +820,8 @@ the event we're interested in.
 
 In this instance, we want to listen for `ons-tabbar`'s `prechange` event. The
 `prechange` event is fired just before the tabbar moves to a tab. We add an
-event listener the same way as we would for any other JavaScript event:
+event listener the same way as we would for any other JavaScript event. Append
+this inside the `<script>` tag of `home.html`:
 
 ```javascript
 document.addEventListener('prechange', ({ target, tabItem }) => {
@@ -846,12 +847,27 @@ Now to the code:
      new tab from `tabItem`'s `label` attribute, and set that as the center text
      of the toolbar.
 
+In general, the pattern to add an event listener is to use
+`document.addEventListener` to listen for the event, and then use
+`document.querySelector` in the callback function to make sure the component
+that fired the event is the one you expected.
+
+##### Next steps
+
+Try adding event listeners to some of the other events that are fired by Onsen
+UI components.
+
+You could try: `ons-tabbar`'s `postchange`, which is fired _after_ the tab is
+changed; or `ons-tabbar`'s `reactive`, which is fired when the currently open
+tab is tapped again; or maybe `ons-navigator`'s `prepop` which is fired just
+before a page is popped from the page stack.
+
 For more information on Onsen UI events and what you can do with them, check the
 API documentation.
 
 ## Expandable list items
 
-We breezed over the Pokemon list page before so we could get on to the tabbar,
+We breezed over the Pokemon list page earlier so we could get on to the tabbar,
 but let's go back to it now.
 
 So far there's a list of Pokemon, created using `ons-list` and `ons-list-item`.
@@ -863,42 +879,43 @@ displaying content that was initially hidden. An `ons-list-item` is turned into
 an expandable list item by adding the `expandable` attribute and adding a child
 `div.expandable-content` containing the hidden content.
 
-Make each of the existing list items expandable:
+Make each of the existing list items expandable by replacing the existing
+`ons-list` in `pokemon.html` with:
 
 ```html
 <ons-list>
   <ons-list-item expandable>
     bulbasaur
     <div class="expandable-content">
-      <ons-button onclick="savePokemon(this)">Save</ons-button>
+      <ons-button onclick="savePokemon(1, this)">Save</ons-button>
     </div>
   </ons-list-item>
 
   <ons-list-item expandable>
     charmander
     <div class="expandable-content">
-      <ons-button onclick="savePokemon(this)">Save</ons-button>
+      <ons-button onclick="savePokemon(4, this)">Save</ons-button>
     </div>
   </ons-list-item>
 
   <ons-list-item expandable>
     squirtle
     <div class="expandable-content">
-      <ons-button onclick="savePokemon(this)">Save</ons-button>
+      <ons-button onclick="savePokemon(7, this)">Save</ons-button>
     </div>
   </ons-list-item>
 
   <ons-list-item expandable>
     pikachu
     <div class="expandable-content">
-      <ons-button onclick="savePokemon(this)">Save</ons-button>
+      <ons-button onclick="savePokemon(25, this)">Save</ons-button>
     </div>
   </ons-list-item>
 
   <ons-list-item expandable>
     trubbish
     <div class="expandable-content">
-      <ons-button onclick="savePokemon(this)">Save</ons-button>
+      <ons-button onclick="savePokemon(568, this)">Save</ons-button>
     </div>
   </ons-list-item>
 </ons-list>
@@ -957,7 +974,7 @@ pictures is tapped, the picture will fill the whole screen in a "gallery" style.
 The user can then swipe left or right to go to the previous or next saved
 Pokemon.
 
-Let's define `savePokemon` in `pokemon.html`:
+Let's define the `savePokemon` function in the `<script>` tag of `pokemon.html`:
 
 ```javascript
 const savePokemon = (pokenumber, button) => {
@@ -968,11 +985,13 @@ const savePokemon = (pokenumber, button) => {
 
 `savePokemon` is called when a save button is pressed. It receives the number of
 the Pokemon we want to save (if you're not familiar with Pokemon, each Pokemon
-has a unique number), and the save button that was pressed. `savePokemon` simply
-calls `addPokemonToGrid` (not yet defined) and closes the expandable list item.
+has a unique number), and a reference to the particular save button that was
+pressed. `savePokemon` simply calls `addPokemonToGrid` (not yet defined) then
+closes the expandable list item.
 
 Now we need to define `addPokemonToGrid` in `saved.html`. For now let's just
-store the Pokemon number in an array:
+store the Pokemon number in an array. Put this in the `<script>` tag of
+`saved.html`:
 
 ```javascript
 let savedPokemon = [];
@@ -983,14 +1002,19 @@ const addPokemonToGrid = pokenumber => {
 };
 ```
 
+Run the app again, tap on a Pokemon in the list, and tap the Save button that
+appears. The list item will contract, and the Pokemon will be saved, although
+we can't see that reflected in the app just yet.
+
 ### Grid
 
 #### Static assets (or whatever it's called)
 
-Getting all the sprites over the internet every time we want to see them is a
-bad idea. Some people will be using the app over a mobile connection and we
-don't want to suck up all their data. So we download all the sprites and save
-them as static assets.
+We need some images of Pokemon for the app, so we'll get some of the sprites
+from an online repository.  Getting all the sprites over the internet every time
+we want to see them is a bad idea. Some people will be using the app over a
+mobile connection and we don't want to suck up all their data. So we download
+all the sprites once and save them as static assets in our project.
 
 Download and unzip https://github.com/PokeAPI/sprites/archive/master.zip.
 
@@ -1011,19 +1035,19 @@ We have the sprites, we have the code to save Pokemon, we have the やる気; le
 grid this mother!
 
 Actually, there is no need for special Onsen UI components here, so we'll just
-use some regular HTML and CSS. Add this to `grid.html`:
+use some regular HTML and CSS. Replace the contents of `saved.html` with:
 
 ```html
-<ons-page id="grid">
+<ons-page id="saved">
   <style>
-    #grideroo {
+    #grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       grid-auto-rows: 33vw;
       background-color: black;
     }
 
-    #grideroo img {
+    #grid img {
       width: 100%;
       height: 100%;
     }
@@ -1037,12 +1061,13 @@ use some regular HTML and CSS. Add this to `grid.html`:
       savedPokemon.push(pokenumber);
 
       // now add the new pokemon to the grid
-      const grid = document.querySelector('#grideroo');
+      const grid = document.querySelector('#grid');
       const cell = document.createElement('div');
-      cell.onclick = () => document.querySelector('#navigator').bringPageTop('card.html', { data: { pokenumber, savedPokemon } });
+      cell.onclick = () => document.querySelector('#navigator')
+        .bringPageTop('card.html', { data: { pokenumber, savedPokemon } });
 
       const image = document.createElement('img');
-      image.setAttribute('src', `img/${pokenumber}.png`); // IS THAT PATH CORRECT?
+      image.setAttribute('src', `img/${pokenumber}.png`);
 
       cell.appendChild(image);
       grid.appendChild(cell);
@@ -1050,7 +1075,7 @@ use some regular HTML and CSS. Add this to `grid.html`:
   </script>
 
   <div id="content">
-    <div id="grideroo"></div>
+    <div id="grid"></div>
   </div>
 </ons-page>
 ```
