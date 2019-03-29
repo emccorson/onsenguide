@@ -883,7 +883,7 @@ Make each of the existing list items expandable by replacing the existing
 `ons-list` in `pokemon.html` with:
 
 ```html
-<ons-list>
+<ons-list id="pokemon-list">
   <ons-list-item expandable>
     bulbasaur
     <div class="expandable-content">
@@ -1057,14 +1057,14 @@ use some regular HTML and CSS. Replace the contents of `saved.html` with:
     let savedPokemon = [];
 
     const addPokemonToGrid = pokenumber => {
-      // we save a list so we can pass it to the card carousel thing
+      // we save a list so we can pass it to the gallery
       savedPokemon.push(pokenumber);
 
       // now add the new pokemon to the grid
       const grid = document.querySelector('#grid');
       const cell = document.createElement('div');
       cell.onclick = () => document.querySelector('#navigator')
-        .bringPageTop('card.html', { data: { pokenumber, savedPokemon } });
+        .bringPageTop('gallery.html', { data: { pokenumber, savedPokemon } });
 
       const image = document.createElement('img');
       image.setAttribute('src', `img/${pokenumber}.png`);
@@ -1091,15 +1091,16 @@ Nothing useful in the gallery yet, but our time is gonna come.
 ### Rose and Valerie, screaming from the gallery
 
 Onsen UI provides a pretty **nifty** component for creating galleries and other
-swipeable affairs. A carousel displays an item on the screen, and then can be
-made to move to show the next or previous item in the carousel.
+swipeable affairs: the carousel component, `ons-carousel`. A carousel displays
+an item on the screen, and then can be made to move to show the next or previous
+item in the carousel.
 
 The two components we are going to need are `ons-carousel` and
 `ons-carousel-item`. In the same vein as `ons-list` and `ons-list-item`,
 `ons-carousel` defines the carousel and all its children are defined by
 `ons-carousel-item`.
 
-Create `gallery.html` and add this markup to it:
+Create `gallery.html` and add:
 
 ```html
 <ons-page id="gallery">
@@ -1115,11 +1116,12 @@ Create `gallery.html` and add this markup to it:
     </div>
   </ons-toolbar>
 
-  <ons-carousel id="carousel" fullscreen swipeable auto-scroll auto-scroll-ratio="0.1"></ons-carousel>
+  <ons-carousel id="carousel" fullscreen swipeable auto-scroll auto-scroll-ratio="0.1">
+  </ons-carousel>
 </ons-page>
 ```
 
-The only thing new here is the carousel. It has quite a few attributes set to
+The only new thing here is the carousel. It has quite a few attributes set to
 tweak the behaviour. Let's go over the meaning of each of these briefly:
 
   - `fullscreen`: The carousel should take up all of the available content
@@ -1130,8 +1132,8 @@ tweak the behaviour. Let's go over the meaning of each of these briefly:
   - `auto-scroll`: Snap to items. In other words, the carousel can't ever stop
     moving in between items.
   - `auto-scroll-ratio`: How much the carousel needs to be moved before it will
-    snap to the next item. The value is between 0 and 1. We have it set pretty
-    low here.
+    snap to the next item. The value can range between 0 and 1. We have it set
+    pretty low here so it doesn't take much swiping to automatically scroll.
 
 There are plenty more carousel attributes and methods. Take a look at the API
 docs for the full list.
@@ -1148,38 +1150,36 @@ carousel is shown:
 Add this in the script tags of `gallery.html`:
 
 ```javascript
-<script>
-  document.addEventListener('show', ({ target }) => {
-    if (target.matches('#gallery')) {
-      const { pokenumber, savedPokemon } = document.querySelector('#navigator').topPage.data;
+document.addEventListener('show', ({ target }) => {
+  if (target.matches('#gallery')) {
+    const { pokenumber, savedPokemon } = document.querySelector('#navigator').topPage.data;
 
-      const carousel = document.querySelector('#carousel');
+    const carousel = document.querySelector('#carousel');
 
-      // figure out what new pokemon have been saved since we last showed the carousel
-      // this way we don't accidentally add the same pokemon twice
-      const sliceIndex = carousel.itemCount - savedPokemon.length;
+    // figure out what new pokemon have been saved since we last showed the gallery
+    // this way we don't accidentally add the same pokemon twice
+    const sliceIndex = carousel.itemCount - savedPokemon.length;
 
-      if (sliceIndex !== 0) { // if there are unadded pokemon
-        const unaddedPokemon = savedPokemon.slice(sliceIndex);
+    if (sliceIndex !== 0) { // if there are unadded pokemon
+      const unaddedPokemon = savedPokemon.slice(sliceIndex);
 
-        unaddedPokemon.map(number => {
-          const carouselItem = ons.createElement(`
-            <ons-carousel-item>
-              <ons-card>
-                <img src="img/${number}.png" />
-              </ons-card>
-            </ons-carousel-item>
-          `);
+      unaddedPokemon.map(number => {
+        const carouselItem = ons.createElement(`
+          <ons-carousel-item>
+            <ons-card>
+              <img src="img/${number}.png" />
+            </ons-card>
+          </ons-carousel-item>
+        `);
 
-          carousel.appendChild(carouselItem);
-        });
-      }
-
-      // go to the selected pokemon
-      carousel.setActiveIndex(savedPokemon.indexOf(pokenumber));
+        carousel.appendChild(carouselItem);
+      });
     }
-  });
-</script>
+
+    // go to the selected pokemon
+    carousel.setActiveIndex(savedPokemon.indexOf(pokenumber));
+  }
+});
 ```
 
 Again we have an event listener on the page's `show` event, so the callback
@@ -1210,7 +1210,7 @@ to your heart's content.
 
 Let's go back to the list of Pokemon at `pokemon.html`. At the moment, there are
 a few Pokemon hardcoded into the list, but it would be better if our list had
-_all_ Pokemon in it.
+_all_ Pokemon in it. All 800 or so.
 
 Luckily, there's PokeAPI to help us out. PokeAPI is a REST API that provides
 information about everything to do with Pokemon. We're going to call one of its
@@ -1222,7 +1222,8 @@ if we want them. That way we only get the results we need as we need them, and
 also don't overload the PokeAPI servers.
 
 Since we're getting the Pokemon from the server, we don't need the hardcoded
-Pokemon currently in the list, so clear the decks:
+Pokemon currently in the list, so clear the decks. Remove the child elements of
+the `ons-list` in `pokemon.html` so that the list looks like this:
 
 ```html
 <ons-list id="pokemon-list">
@@ -1231,10 +1232,10 @@ Pokemon currently in the list, so clear the decks:
 
 Making the request to the API doesn't involve anything special or specific to
 Onsen UI, so there won't be much in the way of explanation. Add this to
-`pokemon.html`:
+`pokemon.html` in the `<script>` tag, appending to what's already there:
 
 ```javascript
-let url = ; 'https://pokeapi.co/api/v2/pokemon';
+let url = 'https://pokeapi.co/api/v2/pokemon';
 
 const get = async () => {
   // do the API call and get JSON response
@@ -1274,16 +1275,48 @@ and interprets it. See the docs for more information.
 We could keep calling `get` until we have all the Pokemon and add them to the
 list all at once, but that is wasteful because the user may never scroll all the
 way through the list. Instead we should only call `get` when the user has seen
-as much of the list as is currently loaded.
+as much of the list as is currently loaded. Let's wrap some of the code in an
+`init` event listener callback, and add some code to call the API as we need it.
+The `<script>` tag of `pokemon.html` should now contain exactly:
 
 ```javascript
-document.addEventListener('init', ({ target }) {
+const savePokemon = (pokenumber, button) => {
+  addPokemonToGrid(pokenumber);
+  button.parentNode.parentNode.hideExpansion();
+};
+
+document.addEventListener('init', ({ target }) => {
   if (target.matches('#pokemon')) {
 
     let url = 'https://pokeapi.co/api/v2/pokemon';
+    let nextPokenumber = 1; // use to keep track of the Pokemon numbers
 
     const get = async () => {
-      /* definition of get */
+      // do the API call and get JSON response
+      const response = await fetch(url);
+      const json = await response.json();
+
+      const newPokemon = json.results.map(e => e.name);
+
+      const list = document.querySelector('#pokemon-list');
+      newPokemon.forEach((name, i) => {
+        list.appendChild(ons.createElement(`
+          <ons-list-item expandable>
+            ${nextPokenumber} ${name}
+            <div class="expandable-content">
+              <ons-button onclick="savePokemon(${nextPokenumber}, this)">Save</ons-button>
+            </div>
+          </ons-list-item>
+        `));
+        nextPokenumber++;
+      });
+
+      url = json.next;
+
+      // hide the spinner when all the pages have been loaded
+      if (!url) {
+        document.querySelector('#after-list').style.display = 'none';
+      }
     };
 
     // get the first set of results as soon as the page is initialised
@@ -1291,7 +1324,7 @@ document.addEventListener('init', ({ target }) {
 
     // at the bottom of the list get the next set of results and append them
     target.onInfiniteScroll = (done) => {
-      if (url) { // does this actually work?
+      if (url) {
         setTimeout(() => {
           get();
           done();
@@ -1299,7 +1332,7 @@ document.addEventListener('init', ({ target }) {
       }
     };
   }
-}
+});
 ```
 
 Here we add a listener for the `init` event that is fired when a page is
@@ -1315,21 +1348,13 @@ results could get spliced, I think.
 > up. However, what you _can't_ do is remove `setTimeout` altogether and just
 > call `get`. This will splice the results as mentioned already.
 
-For `infiniteScroll` to work, we need to wrap our content in `div.content`.
-Actually, Onsen UI wraps your content in `div.content` at compile time but we
-can do it explicitly here. We'll also add a spinner so that when the user
-reaches the end of the page, a spinner is shown while the next results are being
-loaded:
+We'll also add a spinner so that when the user reaches the end of the page, a
+spinner is shown while the next results are being loaded. Add this to the body
+of `pokemon.html` after the `ons-list` definition:
 
 ```html
-<div class="content">
-
-  <ons-list id="pokemon-list">
-  </ons-list>
-  <div class="after-list" style="margin: 20px; text-align: center;">
-    <ons-icon icon="fa-spinner" size="26px" spin></ons-icon>
-  </div>
-
+<div id="after-list" style="margin: 20px; text-align: center;">
+  <ons-icon icon="fa-spinner" size="26px" spin></ons-icon>
 </div>
 ```
 
@@ -1337,7 +1362,7 @@ Run the app and have a look at the list again. First we see that some Pokemon
 have been loaded in the list from the start. Scroll to the bottom of the list
 and you should briefly see the spinner to indicate that the next results are
 loading. Then the API call will finish and the next results will be added to the
-list. Scroll to the bottom and repeat forever.
+list. Scroll to the bottom and repeat until we run out of results.
 
 <!--
 > > - This is regular old JavaScript; nothing specific to Onsen UI here
@@ -1353,21 +1378,25 @@ results of the API calls so we don't put unnecessary strain on PokeAPI. At the
 moment, when the app is closed, the whole Pokemon list is lost and we have to
 get all the data all over again next time we open the app.
 
-Since we're just using regular old JavaScript here, we can use local storage to
-store the Pokemon. Local storage is good for storing a few strings here and
-there. It will work for our purposes (probably) but for anything serious, you
-should look into a proper caching solution. I'd love to recommend one to you but
-I don't know any. I bet you thought I knew what I was talking about. Well, I've
-got bad news for you, budderoo.
+We can use local storage to store the Pokemon. Local storage is good for storing
+a few strings here and there. It will work for our purposes (probably) but for
+anything serious, you should look into a proper caching solution. I'd love to
+recommend one to you but I don't know any. I bet you thought I knew what I was
+talking about. Well, I've got bad news for you, budderoo.
+
+> The code in this section will be explained piece by piece, without showing you
+> where to add it in the existing code. However, the full code is shown at the
+> end of the section so you can easily copy it into your `pokemon.html` file. If
+> you just want to speed through this section, skip to end for the full code
+> listing.
 
 First off we'll define a couple of constants that will help us store the Pokemon
 in the right place. These will be used to create the keys in local storage:
 
 ```javascript
-if (target.matches('#pokemon')) {
-  // local storage keys
-  const URL = 'pokemon__url';
-  const PREFIX = 'pokemon__';
+// local storage keys
+const URL = 'pokemon__url';
+const PREFIX = 'pokemon__';
 ```
 
 Instead of saving the next URL in the `url` variable, we'll now store it in
@@ -1381,12 +1410,13 @@ already have cached. We can do this by looping through all the Pokemon numbers
 starting from 1, until we don't get a result from the cache:
 
 ```javascript
-let pokemonCount = 1;
+let nextPokenumber = 1;
 let storedPokemon;
-while ((storedPokemon = localStorage.getItem(PREFIX + pokemonCount)) !== null) {
-  console.log(`got ${storedPokemon} from local with key ${PREFIX + pokemonCount}`);
-  // THE CODE TO APPEND TO THE LIST SHOULD GO HERE
-  pokemonCount++;
+
+while ((storedPokemon = localStorage.getItem(PREFIX + nextPokenumber)) !== null) {
+  console.log(`got ${storedPokemon} from local with key ${PREFIX + nextPokenumber}`);
+  appendPokemon(nextPokenumber, storedPokemon);
+  nextPokenumber++;
 }
 ```
 
@@ -1400,7 +1430,8 @@ if (!localStorage.getItem(URL)) {
 ```
 
 Right, that's it for getting the cached stuff when we initialise the app. Now to
-store it in the first place. Modify `get` like so:
+store it in the first place. `get` has to be modified to use local storage
+instead of the local _variables_ we were using before:
 
 ```javascript
 const get = async () => {
@@ -1411,23 +1442,21 @@ const get = async () => {
   const newPokemon = json.results.map(e => e.name);
 
   const list = document.querySelector('#pokemon-list');
-  newPokemon.forEach((name) => {
-    list.appendChild(ons.createElement(`
-      <ons-list-item expandable>
-        ${name}
-        <div class="expandable-content">
-          <ons-button onclick="savePokemon(pokemonCount, this)">Save</ons-button>
-        </div>
-      </ons-list-item>
-    `));
+  newPokemon.forEach((name, i) => {
+    appendPokemon(nextPokenumber, name);
 
-    const key = PREFIX + pokemonCount;
+    const key = PREFIX + nextPokenumber;
     console.log(`Storing ${name} as ${key}`);
     localStorage.setItem(key, name)
-    pokemonCount++;
+    nextPokenumber++;
   });
 
-  url = json.next;
+  localStorage.setItem(URL, json.next);
+
+  // hide the spinner when all the pages have been loaded
+  if (!localStorage.getItem(URL)) {
+    document.querySelector('#after-list').style.display = 'none';
+  }
 };
 ```
 
@@ -1436,25 +1465,112 @@ be able to clear local storage manually. This is because the app will assume
 that all the data we've already stored in local storage has been stored
 correctly, but mere mortals are unlikely to get the code right first time. Or
 even if you're just playing about with the code it will be handy. So we should
-add a button to the side menu (in `index.html`):
+add a button to the side menu. Add this to the list in `index.html`:
 
-```javascript
-<ons-list>
-  <ons-list-item onclick="load('about.html')">
-    About
-  </ons-list-item>
-  <ons-list-item onclick="clearLocalStorage()">
-    Clear local storage
-  </ons-list-item>
-</ons-list>
+```html
+<ons-list-item onclick="clearLocalStorage()">
+  Clear local storage
+</ons-list-item>
 ```
+
+And then add the associated function in the `<script>` tag of `index.html`:
 
 ```javascript
 const clearLocalStorage = () => {
   localStorage.clear();
   ons.notification.alert('Cleared local storage');
-}
+};
 ```
+
+As promised, here is the full JavaScript listing for `pokemon.html`. The
+contents of the `<script>` tag in `pokemon.html` should exactly match this, so
+copy and paste it in now:
+
+```javascript
+const savePokemon = (pokenumber, button) => {
+  addPokemonToGrid(pokenumber);
+  button.parentNode.parentNode.hideExpansion();
+};
+
+const appendPokemon = (pokenumber, name) => {
+  const list = document.querySelector('#pokemon-list');
+  list.appendChild(ons.createElement(`
+    <ons-list-item expandable>
+      ${pokenumber} ${name}
+      <div class="expandable-content">
+        <ons-button onclick="savePokemon(${pokenumber}, this)">Save</ons-button>
+      </div>
+    </ons-list-item>
+  `));
+}
+
+document.addEventListener('init', ({ target }) => {
+  if (target.matches('#pokemon')) {
+    // local storage keys
+    const URL = 'pokemon__url';
+    const PREFIX = 'pokemon__';
+
+    let nextPokenumber = 1;
+    let storedPokemon;
+
+    while ((storedPokemon = localStorage.getItem(PREFIX + nextPokenumber)) !== null) {
+      console.log(`got ${storedPokemon} from local with key ${PREFIX + nextPokenumber}`);
+      appendPokemon(nextPokenumber, storedPokemon);
+      nextPokenumber++;
+    }
+
+    if (!localStorage.getItem(URL)) {
+      localStorage.setItem(URL, 'https://pokeapi.co/api/v2/pokemon');
+    }
+
+    const get = async () => {
+      // do the API call and get JSON response
+      const response = await fetch(localStorage.getItem(URL));
+      const json = await response.json();
+
+      const newPokemon = json.results.map(e => e.name);
+
+      const list = document.querySelector('#pokemon-list');
+      newPokemon.forEach((name, i) => {
+        appendPokemon(nextPokenumber, name);
+
+        const key = PREFIX + nextPokenumber;
+        console.log(`Storing ${name} as ${key}`);
+        localStorage.setItem(key, name)
+        nextPokenumber++;
+      });
+
+      localStorage.setItem(URL, json.next);
+
+      // hide the spinner when all the pages have been loaded
+      if (!localStorage.getItem(URL)) {
+        document.querySelector('#after-list').style.display = 'none';
+      }
+    };
+
+    // get the first set of results as soon as the page is initialised
+    get();
+
+    // at the bottom of the list get the next set of results and append them
+    target.onInfiniteScroll = (done) => {
+      if (localStorage.getItem(URL)) {
+        setTimeout(() => {
+          get();
+          done();
+        }, 200);
+      }
+    };
+  }
+});
+```
+
+Run the app now (maybe clear local storage first with the side menu button, and
+also clear the app log if you're using Monaca Debugger). You'll see that there
+are no results in local storage so the API will be called. You can verify this
+by checking the app log or console, and seeing the messages saying that "X
+Pokemon has been stored" etc. Then restart the app, and this time see from the
+log (and faster loading times) that cached Pokemon are loaded from local
+storage, not from PokeAPI.
 
 <!--
 > > - Add local storage caching as well
