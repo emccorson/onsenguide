@@ -485,7 +485,7 @@ classes automatically positions each `div` in the correct place.
 
 #### Side menus
 
-Now we'll see how to add a collapsable side menu. We're going to add links to
+Now we'll see how to add a collapsible side menu. We're going to add links to
 other pages in the side menu, so let's create a new page. Create a new file
 `about.html` and paste this:
 
@@ -562,7 +562,7 @@ icons, see the [API page](/v2/api/js/ons-icon.html).
 Side menus are created in Onsen UI by using the `ons-splitter-` components.
 There is a parent component `ons-splitter`. It has two children:
 `ons-splitter-side`, which contains everything that should appear in the side
-menu; and `ons-splitter-content`, which defines everthing _outside_ the side
+menu; and `ons-splitter-content`, which defines everything _outside_ the side
 menu. This means that `ons-splitter` effectively wraps the whole app.
 
 We're about to rewrite the body of `index.html`, so first let's move the login
