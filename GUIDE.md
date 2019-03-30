@@ -80,42 +80,6 @@ Unpkg provides CDN support for Onsen UI’s CSS and JavaScript. Just use these C
 <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
 ```
 
-<!--
-> > - Is the original not OK here?
-> >   - NO! Because it doesn't shill Monaca. And anyway, Monaca debugger is very
-> >     handy here.
-> >
-> > - Installation options:
-> >   - Run in playground
-> >     - No setup required
-> >     - Easy to switch between iOS and Android
-> >     - Can't do multiple files
-> >   - Monaca CLI
-> >     - **RECOMMEND THIS ONE**
-> >       - Will I need to update the templates before I recommend this? If the
-> >         templates change then the tutorial might be in hot water.
-> >     - Can develop locally with Monaca debugger which is very good when it
-> >       doesn't break
-> >     - Need to create a Monaca account
-> >     - You will end up with a Cordova app but if you don't know what that is, you
-> >       can safely ignore it for this tutorial
-> >     - Get node and then:
-> >
-> >     ```
-> >     npm install -g monaca
-> >     monaca create tutorial --template onsenui-v2-js-minimum
-> >     ```
-> >
-> >   - Regular old CDN
-> >     - Good if you live in 2004; bad if you aren't sold on self-flaggelation
-> >     - Joking aside, this is a fine option, but you'll need to figure out how to
-> >       make it into an app
-> >   - JS Frameworks
-> >     - If you want to use React, Vue or Angular 2+, see the tutorial I haven't
-> >       written yet
-> >     - If you want to use AngularJS, see the tutorial that will never be written
--->
-
 #### Creating a page
 
 Let's create the first screen. Each screen in Onsen UI is called a "page". The
@@ -204,48 +168,6 @@ pages](/v2/api/js/).
 > Some modifiers are available for iOS but not Android, and vice-versa. Make
 > sure to check how your app looks on multiple devices.
 
-<!--
-> > - Open up `www/index.html`
-> > - In the body, add:
-> >
-> > ```html
-> > <ons-page>
-> >   Hello, world!
-> > </ons-page>
-> > ```
-> >
-> > - Say some things about `ons-page` and how it's HTML just like you know and love
-> > - Now stick in the login form and button:
-> >
-> > ```html
-> > <ons-page>
-> >   <div style="text-align: center; margin-top: 50%">
-> >   <p>
-> >     <ons-input id="username" placeholder="Username" modifier="underbar"></ons-input>
-> >   </p>
-> >
-> >   <p>
-> >     <ons-input
-> >       id="password"
-> >       placeholder="Password"
-> >       type="password"
-> >       modifier="underbar"
-> >     >
-> >     </ons-input>
-> >   </p>
-> >
-> >   <p>
-> >     <ons-button style="">Sign in</ons-button>
-> >   </p>
-> >   </div>
-> > </ons-page>
-> > ```
-> >
-> > - (Boy, it certainly got ugly quickly.)
-> > - Run the app, punch the air
--->
-
-
 #### Adding JavaScript
 
 We have a pretty login form now, but when we click the button, nothing happens.
@@ -295,13 +217,6 @@ Try switching `ons.notification.alert` for something different. You could try
 
 See more about the available notifications in the API pages.
 
-
-<!--
-> > - Now make the button work
-> >   - Introduce the `script` tag
-> >   - Set `onclick` and say it's just exactly the same as a normal button but it
-> >     looks better. Make the click show an Onsen alert.
--->
 
 #### Templates
 
@@ -435,23 +350,6 @@ templates using the `template` element, _or_ in their own file. When we call
 looks in the current file for templates with `id="home.html"`, and then looks
 for files called `home.html`. This is why nothing broke when we moved the home
 page out of a template and into its own file.
-
-<!--
-> > - Talk about pages
-> > - Make a new page
-> >   - Recommend now that any children still in the playground should grow up and
-> >     get a real man's toolchain
-> >   - The new page should go in a new file
-> >
-> > - The mighty navigator! (or how to wield pages)
-> > - Move the login page to its own file and make the index page just the navigator
-> >
-> > - Now to log in:
-> >   - Set the click for button to check the username and password and then move
-> >     to the new page if all is good
-> >   - At this point, warn any morons that you shouldn't store the username and
-> >     password in your HTML in real life
--->
 
 #### Toolbars
 
@@ -833,25 +731,6 @@ Try setting the `icon` attribute of `ons-tab` and see the effect. The usage is
 the same as `ons-icon`'s `icon` attribute.
 
 
-<!-- 
-#### Styling
-
-##### Theme Roller
-
-Now seems like a good time for a diversion into styling Onsen UI apps. There's a
-handy tool for this called Onsen UI [Theme
-Roller](https://onsen.io/theme-roller/). Once I know how to use it I'll let you
-know.
-
--->
-
-<!--
-> > - Figure out how to use the theme roller
-> > - Make a red theme to match our Pokémon app
-> > - Download the theme and add it to the app styles
-> > - At this point playground scrubs really should give up
--->
-
 #### App structure
 
 We have now built an app with a fairly complicated structure. Time for a quick
@@ -884,9 +763,6 @@ you are sure what should be a tab and what should be a regular page.
 > giving you two elements with the same ID. In general, there are better ways
 > to handle a page that is sometimes a normal page and sometimes a tab.
 
-<!--
-> > - Add a new tab for the pokemon list page
--->
 
 #### Events
 
@@ -1034,14 +910,6 @@ compiler by writing the compiler output in your HTML file to begin with. This is
 helpful whenever you want to access things that the compiler does automatically,
 such as adding a top part to an expandable list item.
 
-<!--
-> > What a dreadful explanation ^
-
-> > - Do expandable list with Save button here
-> >   - But wait, that's bad UI! (Well, that's a problem for U, not I.)
-> >
-> > - Add save functionality now or once we have the grid?
--->
 
 ##### Saving Pokémon
 
@@ -1098,14 +966,6 @@ Download and unzip https://github.com/PokeAPI/sprites/archive/master.zip. Then
 move the contents of `sprites/pokemon` into a new directory in the project
 `./www/img`.
 
-<!--
-- Get the static images
-- Do we need to curl them or is there a zip file somewhere or what?
-  - Check the other Pokedex sample app to find out
-- These get saved in... I don't know.
-- But once they are saved we can reference them as easy as lemons
--->
-
 ##### Making the grid
 
 Now to create a grid. Actually, there is no need for special Onsen UI components
@@ -1157,9 +1017,6 @@ here, so we'll just use some regular HTML and CSS. Replace the contents of
 You can now save a Pokémon from the list and have its picture show up in the
 grid. Tapping the image takes you to the gallery view.
 
-<!--
-- Nothing special Onsen UI-wise so just chuck the code at 'em and vamoose
--->
 
 #### Carousels
 
@@ -1274,11 +1131,6 @@ Then all that remains is to move the carousel to the image of the tapped
 Pokémon. `ons-carousel`'s `setActiveIndex` function is what we need here.
 
 Run the app again and you can now swipe the gallery left and right.
-
-<!--
-- Introduce carousel
-- Introduce card if we can be bothered
--->
 
 #### Remote API calls
 
@@ -1439,13 +1291,6 @@ have been loaded in the list from the start. Scroll to the bottom of the list
 and you should briefly see the spinner to indicate that the next results are
 loading. Then the API call will finish and the next results will be added to the
 list. Scroll to the bottom and repeat until we run out of results.
-
-<!--
-> > - This is regular old JavaScript; nothing specific to Onsen UI here
-> > - Don't forget the bloomin' styling
-> > - What happens when we don't get a new URL? Fix this or face the
-> >   consequences. (Or flee town, cowboy.)
--->
 
 #### Caching data
 
@@ -1664,161 +1509,5 @@ by checking the app log or console, and seeing the messages saying that "X
 Pokémon has been stored" etc. Then restart the app, and this time see from the
 log (and faster loading times) that cached Pokémon are loaded from local
 storage, not from PokeAPI.
-
-<!--
-> > - Add local storage caching as well
-> >   - Why cache? Because the PokeAPI people would get mad if we didn't
-> >   - Also it will work better offline
-> >   - Caching sucks for anything big but we're just within reasonable bounds for
-> >     the amount of data we're storing
-> >   - And it's just strings so that's fine too
-> > - And don't forget the button to clear local storage as an aside
--->
-
-
-<!--
-
-#### Lazy list
-
-> Again, this section will explain the important snippets of code without
-> showing where exactly to add them to `pokemon.html`. The full listing is at
-> the end of the section, so skip to the end if you just want the final code.
-
-`ons-list-item` worked well when we only had a few items in the list, but if you
-try scrolling about once several hundred Pokémon have been loaded, you might
-notice things starting to slow up a bit.
-
-When a new `ons-list-item` gets added to the DOM, it stays there forever (unless
-we manually destroy it). That means the app has to cope with hundreds of list
-items when the list is fully loaded. But the user only sees a small fraction of
-those list items at once, so the rest don't really need to be in the DOM.
-
-Enter `ons-lazy-repeat`. `ons-lazy-repeat` can be used to display very large and
-even infinite lists without a drop in performance. It is a child element of
-`ons-list`. Let's add this as the child of the `ons-list` in `pokemon.html`:
-
-```html
-<ons-lazy-repeat id="lazy"></ons-lazy-repeat>
-```
-
-Straightforward. Now we need a bit of JavaScript to bend the lazy repeat
-to our will.
-
-`ons-lazy-repeat` has a property called `delegate`, which is an object
-containing functions that it uses to render list items. We need to write two of
-those functions:
-
-  - `createItemContent`, which receives an index number of the item to be
-    created and should return an Element.
-  - `countItems`, which returns the total number of items in the list.
-
--->
-
-<!--
-> At this point you might reasonably ask what the hell `countItems` is supposed
-> to return for an infinite list. Good question; answer to be discovered. (And
-> the answer appears not to be "NaN" or "Infinity".)
--->
-
-<!--
-
-```javascript
-document.querySelector('#lazy').delegate = {
-  createItemContent: i => {
-    return ons.createElement(`
-      <ons-list-item
-        expandable
-      >
-        ${i + 1} ${items[i]}
-
-        <div class="expandable-content">
-          <ons-button onclick="savePokemon(${i + 1}, this)">Save</ons-button>
-        </div>
-      </ons-list-item>
-    `);
-  },
-  countItems: () => {
-    return items.length;
-  }
-};
-```
-
-Ah, hold on, `createItemContent` only receives an index number. We better save
-the Pokémon names in an array so we know what to load. When we get a new
-Pokémon, we need to save it in _both_ local storage and an array of items. Then
-when the app loads, instead of reading local storage and appending everything to
-the DOM, we need to put Pokémon in local storage in the items array and then
-call `ons-lazy-repeat`'s `refresh` method. Then `ons-lazy-repeat` will handle
-adding the contents of the items array to the DOM.
-
-> Every time the content of your items array changes, remember to call `refresh`,
-> or the new items won't appear in the app. In this tutorial, there are two
-> points when we need to call refresh: when the items are initially loaded from
-> local storage, and every time new items are received from an API call.
-
-First off, let's create an array for the Pokémon names.
-
-```javascript
-let items = [];
-```
-
-The looping bit to get the cached Pokémon when the page initialises now adds the
-cached Pokémon name to the `items` array, instead of manually appending the
-Pokémon using `ons-list-item`:
-
-```javascript
-// load the Pokémon already cached
-let storedPokemon;
-while ((storedPokemon = localStorage.getItem(PREFIX + nextPokenumber)) !== null) {
-  console.log(`got ${storedPokemon} from local with key ${PREFIX + nextPokenumber}`);
-  items[pokemonCount] = storedPokemon;
-  nextPokenumber++;
-}
-```
-
-And change `get` like so:
-
-```javascript
-const get = async () => {
-  // do the API call and get JSON response
-  const response = await fetch(localStorage.getItem(URL));
-  const json = await response.json();
-
-  // save the number of items before adding the new ones we just got
-  const previousLength = items.length;
-
-  // add new items
-  const newPokemonCapitalised = json.results.map(e => e.name.charAt(0).toUpperCase() + e.name.slice(1));
-  items.push(...newPokemonCapitalised);
-
-  // save new items and next url in local storage
-  newPokemonCapitalised.forEach((name, i) => {
-    const key = PREFIX + (previousLength + i);
-    //console.log(`Storing ${name} as ${key}`);
-    localStorage.setItem(key, name)
-  });
-  localStorage.setItem(URL, json.next);
-
-  // reload the list with new items
-  lazy.refresh();
-};
-```
-
-Run the app. Smooth as a baby's bottom, <del>and just as entertaining</del>.
-
--->
-
-<!--
-> > - It's going to get horribly slow if we load those 900-odd Pokémon all into the
-> >   DOM.
-> > - To make it more slip-slidy fun, let's use lazy instead
-> > - It kills the items you can't see so everything is a bit faster
-> > - You need to set up the delegate object for it to work
-> > - You also need to remember to refresh it
--->
-
-
-
-
 
 <% end %>
