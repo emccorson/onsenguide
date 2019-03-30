@@ -21,7 +21,6 @@ will cover solutions to common tasks in app development, including:
   - Paging data from a remote API
   - Displaying large lists efficiently
   - Showing a swipeable gallery of images
-  - Caching data
 
 The app you'll be creating displays a list of Pokémon fetched from a remote API.
 The user can save Pokémon from the list and view them in a grid display. Tapping
