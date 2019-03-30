@@ -1034,6 +1034,9 @@ Create `gallery.html` and add:
 ```html
 <ons-page id="gallery">
   <style>
+    .gallery-image {
+      width: 100%;
+    }
   </style>
 
   <script>
@@ -1098,7 +1101,7 @@ document.addEventListener('show', ({ target }) => {
         const carouselItem = ons.createElement(`
           <ons-carousel-item>
             <ons-card>
-              <img src="img/${number}.png" />
+              <img class="gallery-image" src="img/${number}.png" />
             </ons-card>
           </ons-carousel-item>
         `);
