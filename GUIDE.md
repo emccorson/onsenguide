@@ -35,18 +35,17 @@ these options:
 
 ##### 1. Monaca CLI & Debugger (Recommended)
 
-Monaca CLI is a command line tool for developing mobile and web apps. It
-can be used with Monaca Debugger, which is a mobile app that allows you to
-easily run your project on a mobile device from your local computer. Using
-these tools requires you to sign up for a free Monaca account.
+Monaca CLI is a command line tool for developing mobile and web apps. It can be
+used with Monaca Debugger, a mobile app that allows you to easily run your
+project on a mobile device from your local computer. Using these tools requires
+you to sign up for a free Monaca account.
 
 Install node and npm, then run `npm install -g monaca` to install Monaca
 CLI. Run `monaca login`, then create a new project with:
 
      monaca create tutorial --template onsenui-v2-js-minimum
 
-To debug the project, install Monaca Debugger from the app store, then on
-Monaca CLI, run:
+To debug the project, install Monaca Debugger from the app store, then run:
 
      monaca debug
 
@@ -124,12 +123,12 @@ Onsen UI page component is called `ons-page`. Delete the contents of the
 `<body>` of `index.html` (leave in everything else) and replace it with the
 following:
 
-> For Monaca CLI users, you'll find `index.html` in the `www` directory. All
-> source files go in `www`.
-
 ```html
 <ons-page></ons-page>
 ```
+
+> For Monaca CLI users, you'll find `index.html` in the `www` directory. All
+> source files go in `www`.
 
 Run the app on your device or browser and you will see screen is a light gray
 color. This is the `ons-page` component.
@@ -194,11 +193,13 @@ Notice that we have set the `modifier` attribute of the two input boxes.
 In this case we are using the `underbar` modifier, which puts a horizontal line
 at the bottom of the input box.
 
+##### Next steps
+
 Try changing the appearance of `ons-button` by setting its modifier attribute.
 Available values include `quiet` and `cta` (call to action).
 
-To see the full list of available modifiers for a component, look at its API
-page in the documentation.
+To see the full list of available modifiers for a component, look at the [API
+pages](/v2/api/js/).
 
 > Some modifiers are available for iOS but not Android, and vice-versa. Make
 > sure to check how your app looks on multiple devices.
@@ -302,12 +303,10 @@ See more about the available notifications in the API pages.
 > >     looks better. Make the click show an Onsen alert.
 -->
 
-#### Navigating pages
+#### Templates
 
 All well and good. But we'd like to move to a new page once the user
 successfully logs in, so let's create a new page.
-
-#### Templates
 
 Add the following to `index.html`, _outside_ the `ons-page` tag but still
 _inside_ the body:
@@ -323,7 +322,7 @@ _inside_ the body:
 This is a template for a new page. Templates aren't loaded automatically when
 the app starts and will only be created when the page is shown.
 
-##### Navigator
+#### Navigating pages
 
 To move between pages, use the `ons-navigator` component. `ons-navigator`
 provides methods for pushing and popping pages to and from the **page stack**.
@@ -410,7 +409,7 @@ The argument `home.html` refers to the page to reset to. The page name is the
 an ID with the suffix `.html`. We'll see why later.
 
 `resetToPage` is just one of the handy methods `ons-navigator` provides. To see
-the others, look at the API docs.
+the others, look at the [API page](/v2/api/js/ons-navigator.html).
 
 #### Multiple files
 
@@ -486,7 +485,7 @@ classes automatically positions each `div` in the correct place.
 
 #### Side menus
 
-Now let's see how to add a collapsable side menu. We're going to add links to
+Now we'll see how to add a collapsable side menu. We're going to add links to
 other pages in the side menu, so let's create a new page. Create a new file
 `about.html` and paste this:
 
@@ -556,7 +555,7 @@ Or how about `icon="fa-spinner"`? With this one you should also try setting the
 ```
 
 For more examples of `ons-icon` usage and to see the full list of available
-icons, see the API page.
+icons, see the [API page](/v2/api/js/ons-icon.html).
 
 ##### Splitter
 
@@ -735,8 +734,8 @@ No further work is needed; `ons-back-button` works straight out the box.
 
 Try extending the app to display different text on the home page before and
 after the About page back button has been tapped. Hint: you should set
-`ons-back-button`'s `options.callback` function. See the API page for more
-details.
+`ons-back-button`'s `options.callback` function. See the [API
+page](/v2/api/js/ons-back-button.html) for more details.
 
 #### Tabs
 
@@ -823,8 +822,8 @@ should be `ons-tab` elements.
 Then each `ons-tab` has a `page` attribute and a `label` attribute. The `page`
 attribute specifies which page should be loaded when the tab is tapped (this is
 the same as the `page` attribute of `ons-navigator`). The `label` attribute
-specifies what text is on the tab itself. There are more `ons-tab` attributes;
-see the docs.
+specifies what text is on the tab itself. There are more `ons-tab` attributes in
+the [documentation](/v2/api/js/ons-tab.html).
 
 ##### Next steps
 
@@ -833,6 +832,8 @@ The tabs we just made are labelled with text, but they can also be icons.
 Try setting the `icon` attribute of `ons-tab` and see the effect. The usage is
 the same as `ons-icon`'s `icon` attribute.
 
+
+<!-- 
 #### Styling
 
 ##### Theme Roller
@@ -841,6 +842,8 @@ Now seems like a good time for a diversion into styling Onsen UI apps. There's a
 handy tool for this called Onsen UI [Theme
 Roller](https://onsen.io/theme-roller/). Once I know how to use it I'll let you
 know.
+
+-->
 
 <!--
 > > - Figure out how to use the theme roller
@@ -942,7 +945,7 @@ tab is tapped again; or maybe `ons-navigator`'s `prepop` which is fired just
 before a page is popped from the page stack.
 
 For more information on Onsen UI events and what you can do with them, check the
-API documentation.
+[API documentation](/v2/api/js).
 
 #### Expandable list items
 
@@ -1040,8 +1043,6 @@ such as adding a top part to an expandable list item.
 > > - Add save functionality now or once we have the grid?
 -->
 
-#### Carousels
-
 ##### Saving Pokémon
 
 What should happen when a user presses the Save button? Well, that's where the
@@ -1085,9 +1086,7 @@ Run the app again, tap on a Pokémon in the list, and tap the Save button that
 appears. The list item will contract, and the Pokémon will be saved, although
 we can't see that reflected in the app just yet.
 
-##### Grid
-
-##### Static assets (or whatever it's called)
+##### Saving the Pokémon images locally
 
 We need some images of Pokémon for the app, so we'll get some of the sprites
 from an online repository.  Getting all the sprites over the internet every time
@@ -1095,10 +1094,9 @@ we want to see them is a bad idea. Some people will be using the app over a
 mobile connection and we don't want to suck up all their data. So we download
 all the sprites once and save them as static assets in our project.
 
-Download and unzip https://github.com/PokeAPI/sprites/archive/master.zip.
-
-Then make a directory `./www/img` and stick the all the sprites in there.
-They're named by Pokémon number - very helpful for us.
+Download and unzip https://github.com/PokeAPI/sprites/archive/master.zip. Then
+move the contents of `sprites/pokemon` into a new directory in the project
+`./www/img`.
 
 <!--
 - Get the static images
@@ -1110,11 +1108,9 @@ They're named by Pokémon number - very helpful for us.
 
 ##### Making the grid
 
-We have the sprites, we have the code to save Pokémon, we have the やる気; let's
-grid this mother!
-
-Actually, there is no need for special Onsen UI components here, so we'll just
-use some regular HTML and CSS. Replace the contents of `saved.html` with:
+Now to create a grid. Actually, there is no need for special Onsen UI components
+here, so we'll just use some regular HTML and CSS. Replace the contents of
+`saved.html` with:
 
 ```html
 <ons-page id="saved">
@@ -1123,7 +1119,6 @@ use some regular HTML and CSS. Replace the contents of `saved.html` with:
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       grid-auto-rows: 33vw;
-      background-color: black;
     }
 
     #grid img {
@@ -1159,20 +1154,19 @@ use some regular HTML and CSS. Replace the contents of `saved.html` with:
 </ons-page>
 ```
 
-With a bit of luck, you can now save a Pokémon from the list and have its
-picture show up in the grid. Tapping the image takes you to the gallery view.
-Nothing useful in the gallery yet, but our time is gonna come.
+You can now save a Pokémon from the list and have its picture show up in the
+grid. Tapping the image takes you to the gallery view.
 
 <!--
 - Nothing special Onsen UI-wise so just chuck the code at 'em and vamoose
 -->
 
-##### Rose and Valerie, screaming from the gallery
+#### Carousels
 
-Onsen UI provides a pretty **nifty** component for creating galleries and other
-swipeable affairs: the carousel component, `ons-carousel`. A carousel displays
-an item on the screen, and then can be made to move to show the next or previous
-item in the carousel.
+Onsen UI provides a component used for creating galleries and other swipeable
+structures: the carousel component, `ons-carousel`. A carousel displays an item
+on the screen, and then can be made to move to show the next or previous item in
+the carousel.
 
 The two components we are going to need are `ons-carousel` and
 `ons-carousel-item`. In the same vein as `ons-list` and `ons-list-item`,
@@ -1214,8 +1208,10 @@ tweak the behaviour. Let's go over the meaning of each of these briefly:
     snap to the next item. The value can range between 0 and 1. We have it set
     pretty low here so it doesn't take much swiping to automatically scroll.
 
-There are plenty more carousel attributes and methods. Take a look at the API
-docs for the full list.
+There are plenty more carousel attributes and methods. Take a look at its [API
+page](/v2/api/js/ons-carousel.html) for the full list.
+
+##### Updating and moving the gallery
 
 Now for the JavaScript to make this work. Two things need to happen when the
 carousel is shown:
@@ -1277,8 +1273,7 @@ that we know what Pokémon are not yet in the carousel. We add them.
 Then all that remains is to move the carousel to the image of the tapped
 Pokémon. `ons-carousel`'s `setActiveIndex` function is what we need here.
 
-Right, enough talk, more execution (said Yurovsky to the Tsar). Swip-swipe away
-to your heart's content.
+Run the app again and you can now swipe the gallery left and right.
 
 <!--
 - Introduce carousel
@@ -1301,8 +1296,8 @@ if we want them. That way we only get the results we need as we need them, and
 also don't overload the PokeAPI servers.
 
 Since we're getting the Pokémon from the server, we don't need the hardcoded
-Pokémon currently in the list, so clear the decks. Remove the child elements of
-the `ons-list` in `pokemon.html` so that the list looks like this:
+Pokémon currently in the list. Remove the child elements of the `ons-list` in
+`pokemon.html` so that the list looks like:
 
 ```html
 <ons-list id="pokemon-list">
@@ -1315,6 +1310,7 @@ Onsen UI, so there won't be much in the way of explanation. Add this to
 
 ```javascript
 let url = 'https://pokeapi.co/api/v2/pokemon';
+let nextPokenumber = 1; // use to keep track of the Pokémon numbers
 
 const get = async () => {
   // do the API call and get JSON response
@@ -1324,15 +1320,16 @@ const get = async () => {
   const newPokemon = json.results.map(e => e.name);
 
   const list = document.querySelector('#pokemon-list');
-  newPokemon.forEach((name, i) => {
+  newPokemon.forEach(name => {
     list.appendChild(ons.createElement(`
       <ons-list-item expandable>
-        ${name}
+        ${nextPokenumber} ${name}
         <div class="expandable-content">
-          <ons-button onclick="savePokemon(/* WHO'S THAT POKEMON???? */, this)">Save</ons-button>
+          <ons-button onclick="savePokemon(${nextPokenumber}, this)">Save</ons-button>
         </div>
       </ons-list-item>
     `));
+    nextPokenumber++;
   });
 
   url = json.next;
@@ -1378,7 +1375,7 @@ document.addEventListener('init', ({ target }) => {
       const newPokemon = json.results.map(e => e.name);
 
       const list = document.querySelector('#pokemon-list');
-      newPokemon.forEach((name, i) => {
+      newPokemon.forEach(name => {
         list.appendChild(ons.createElement(`
           <ons-list-item expandable>
             ${nextPokenumber} ${name}
@@ -1459,15 +1456,15 @@ list. Scroll to the bottom and repeat until we run out of results.
 > listing.
 
 As the outstandingly moral people that we are, we should really cache the
-results of the API calls so we don't put unnecessary strain on PokeAPI. At the
-moment, when the app is closed, the whole Pokémon list is lost and we have to
+results of the API calls so we don't put unnecessary strain on PokeAPI.
+Currently when the app is closed, the whole Pokémon list is lost and we have to
 get all the data all over again next time we open the app.
 
-We can use local storage to store the Pokémon. Local storage is good for storing
-a few strings here and there. It will work for our purposes (probably) but for
-anything serious, you should look into a proper caching solution. I'd love to
-recommend one to you but I don't know any. I bet you thought I knew what I was
-talking about. Well, I've got bad news for you, budderoo.
+We can use local storage to store the Pokémon.
+
+> Local storage is good for storing a few strings here and there. It will work
+> for our purposes but for anything serious, you should look into a proper
+> caching solution.
 
 First off we'll define a couple of constants that will help us store the Pokémon
 in the right place. These will be used to create the keys in local storage:
@@ -1539,6 +1536,8 @@ const get = async () => {
 };
 ```
 
+##### Adding a button to clear local storage
+
 While we're testing the local storage functionality, it's going to be useful to
 be able to clear local storage manually. This is because the app will assume
 that all the data we've already stored in local storage has been stored
@@ -1560,6 +1559,8 @@ const clearLocalStorage = () => {
   ons.notification.alert('Cleared local storage');
 };
 ```
+
+##### Full `pokemon.html` JavaScript listing
 
 As promised, here is the full JavaScript listing for `pokemon.html`. The
 contents of `pokemon.html` should exactly match this, so
@@ -1819,7 +1820,5 @@ Run the app. Smooth as a baby's bottom, <del>and just as entertaining</del>.
 
 
 
-
-And we're done.
 
 <% end %>
