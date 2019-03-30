@@ -962,9 +962,9 @@ we want to see them is a bad idea. Some people will be using the app over a
 mobile connection and we don't want to suck up all their data. So we download
 all the sprites once and save them as static assets in our project.
 
-Download and unzip https://github.com/PokeAPI/sprites/archive/master.zip. Then
-move the contents of `sprites/pokemon` into a new directory in the project
-`./www/img`.
+Download and unzip the
+[images](https://github.com/PokeAPI/sprites/archive/master.zip). Then move the
+contents of `sprites/pokemon` into a new directory in the project `./www/img`.
 
 ##### Making the grid
 
