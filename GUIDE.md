@@ -730,6 +730,49 @@ Try setting the `icon` attribute of `ons-tab` and see the effect. The usage is
 the same as `ons-icon`'s `icon` attribute.
 
 
+#### Styling
+
+Now is a good time to take a break from coding and take a look at how to style
+our app. Styling Onsen UI is very easy with [Onsen UI Theme
+Roller](https://onsen.io/theme-roller/).
+
+Theme Roller is a web app that lets you alter the appearance of Onsen UI
+components down to the finest detail. You can see your changes reflected in the
+Theme Roller without needing to download anything.
+
+Go to the Theme Roller and have a look around. Once you are ready, click
+'Customize' (under 'Theme Preset' in the sidebar) to start making a custom
+theme.
+
+A sidebar will appear on the right with a list of variables that you can change.
+There are General Variables which affect the style of the whole app, and there
+are Component Variables which refer to specific components. As you scroll down
+the middle pane with the component examples, notice how the Component Variables
+change to match the component that is shown in the middle.
+
+Play around with changing some variables to whatever you like (aesthetic matters
+are up to you). Once you like how the style looks, click 'Download' at the
+bottom right corner to download your new theme.
+
+Unzip the downloaded file, then copy `theme.css` and `onsen-css-components.css`
+to your project's `www/css` directory.
+
+Now open `index.html` and remove the following line:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+```
+
+In its place, add:
+
+```html
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/onsen-css-components.css">
+```
+
+Run the app and you should now see your theme has been applied.
+
+
 #### App structure
 
 We have now built an app with a fairly complicated structure. Time for a quick
